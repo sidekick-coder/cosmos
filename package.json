@@ -1,0 +1,41 @@
+{
+  "name": "cosmos",
+  "description": "CLI tool to manage vps servers with a focus on simplicity and ease of use.",
+  "version": "1.0.0",
+  "license": "MIT",
+  "type": "module",
+  "author": "Henrique <henrique@sidekick-coder.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sidekick-coder/cosmos.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "bin": {
+    ".": "./index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "dependencies": {
+    "@inquirer/prompts": "^7.2.4",
+    "cli-table3": "^0.6.5",
+    "cliui": "^8.0.1",
+    "dotenv": "^16.4.7",
+    "eslint": "^9.19.0",
+    "fast-glob": "^3.3.3",
+    "lodash-es": "^4.17.21"
+  },
+  "devDependencies": {
+    "@sidekick-coder/eslint-config": "^1.1.0",
+    "@types/lodash-es": "^4.17.12",
+    "@types/node": "^22.10.10",
+    "eslint-plugin-import": "^2.31.0",
+    "tsup": "^8.4.0",
+    "tsx": "^4.19.3",
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^3.0.9"
+  }
+}
