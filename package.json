@@ -26,12 +26,15 @@
     "dotenv": "^16.4.7",
     "eslint": "^9.19.0",
     "fast-glob": "^3.3.3",
-    "lodash-es": "^4.17.21"
+    "lodash-es": "^4.17.21",
+    "ssh-config": "^5.0.3",
+    "ssh2": "^1.16.0"
   },
   "devDependencies": {
     "@sidekick-coder/eslint-config": "^1.1.0",
     "@types/lodash-es": "^4.17.12",
     "@types/node": "^22.10.10",
+    "@types/ssh2": "^1.15.5",
     "eslint-plugin-import": "^2.31.0",
     "tsup": "^8.4.0",
     "tsx": "^4.19.3",

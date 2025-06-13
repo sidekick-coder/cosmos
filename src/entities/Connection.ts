@@ -3,7 +3,6 @@ export default class Connection {
     public host: string
 
     constructor(data?: Partial<Connection>) {
-        this.id = data?.id || ''
-        this.host = data?.host || ''
+        Object.assign(this, data)
     }
 }
