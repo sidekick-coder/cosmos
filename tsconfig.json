@@ -14,6 +14,10 @@
         "baseUrl": ".",
         "paths": {
             "@/*": ["./src/*"]
-        }
-	}
+        },
+    },
+    "exclude": [
+        "eslint.config.mjs",
+        "index.js"
+    ]
 }

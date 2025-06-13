@@ -12,7 +12,7 @@ export default [
             'import/no-unresolved': 'off',
             '@typescript-eslint/no-unused-vars': [
                 'error',
-                { argsIgnorePattern: '^_', caughtErrors: 'none'},
+                { argsIgnorePattern: '^_', caughtErrors: 'none' },
             ], // Ignore unused variables that start with an underscore
         },
     },
