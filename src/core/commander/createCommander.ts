@@ -109,11 +109,6 @@ export function createCommander(config: Config = {}) {
             options: parse(command.options || {}, args),
         }
 
-        if ((args.includes('--help') || args.includes('-h')) && command.name !== 'help') {
-            console.log(createCommandHelp(command, { bin: config.bin }))
-            return
-        }
-
         if (config.before) {
             config.before({ command, ctx })
         }

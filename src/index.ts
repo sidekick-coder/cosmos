@@ -16,4 +16,18 @@ modules.forEach((module) => {
     module.setup({ commander })
 })
 
-commander.handle(process.argv.slice(2))
+const args = process.argv.slice(2)
+const firstArg = args[0]
+const registed: string[] = []
+
+commander.commands.forEach((command) => registed.push(command.name))
+Array.from(commander.getSubcommaners().keys()).forEach((sub) => registed.push(sub))
+
+const isRootCommand = registed.includes(firstArg)
+
+// If the first argument is not a registered command, we assume it's a host command
+if (!isRootCommand && !!firstArg) {
+    args.unshift('host')
+}
+
+commander.handle(args)

@@ -10,6 +10,6 @@ interface DefineModule {
     setup?: (setup: DefineModuleSetupPayload) => void
 }
 
-export function defineModule(module: DefineModule) {
+export function defineHostModule(module: DefineModule) {
     return module
 }

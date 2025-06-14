@@ -1,67 +1,25 @@
 import type { ConnectConfig } from 'ssh2'
-import { Client } from 'ssh2'
+import { createClient } from './createClient.js'
 
 export interface CreateShellOptions extends ConnectConfig {}
 
 export function createShell(options: CreateShellOptions) {
-    const connection = new Client()
+    async function command(args: string): Promise<string> {
+        const client = createClient(options)
 
-    function connect() {
-        connection.connect(options)
-    }
+        try {
+            client.connect()
 
-    function disconnect() {
-        return new Promise<void>((resolve, reject) => {
-            connection.end()
-            connection.on('close', () => {
-                resolve()
-            })
-            connection.on('error', (err) => {
-                reject(err)
-            })
-        })
-    }
-
-    function exec(command: string): Promise<string> {
-        return new Promise((resolve, reject) => {
-            connection.on('ready', () => {
-                connection.exec(command, (err, stream) => {
-                    if (err) {
-                        connection.end()
-                        reject(err)
-                        return
-                    }
-
-                    let stdout = ''
-                    let stderr = ''
-
-                    stream.on('close', (code: number, _signal: string) => {
-                        connection.end()
-                        if (code === 0) {
-                            resolve(stdout)
-                            return
-                        }
-                        reject(new Error(stderr || `Command failed with code ${code}`))
-                    })
-
-                    stream.on('data', (data: Buffer) => {
-                        stdout += data.toString()
-                    })
-
-                    stream.stderr.on('data', (data: Buffer) => {
-                        stderr += data.toString()
-                    })
-                })
-            })
-
-            connection.on('error', reject)
-        })
+            return await client.exec(args)
+        } catch (error) {
+            client.disconnect()
+            throw error
+        } finally {
+            await client.disconnect()
+        }
     }
 
     return {
-        connect,
-        disconnect,
-        exec,
-        connection,
+        command,
     }
 }
