@@ -5,7 +5,7 @@ import Connection from '@/entities/Connection.js'
 import { object } from '@/core/ui/object.js'
 
 export default defineCommand({
-    name: 'create-connection',
+    name: 'create',
     description: 'Create a new connection',
     execute: async () => {
         const id = await input({

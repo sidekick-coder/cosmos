@@ -3,7 +3,7 @@ import ConnectionRepository from '@/repositories/ConnectionRepository.js'
 import { input } from '@inquirer/prompts'
 
 export default defineCommand({
-    name: 'delete-connection',
+    name: 'delete',
     description: 'Delete a connection',
     options: {
         id: {

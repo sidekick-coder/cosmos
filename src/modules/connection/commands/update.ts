@@ -3,7 +3,7 @@ import ConnectionRepository from '@/repositories/ConnectionRepository.js'
 import { input } from '@inquirer/prompts'
 
 export default defineCommand({
-    name: 'update-connection',
+    name: 'update',
     description: 'Update a connection',
     execute: async () => {
         const repository = new ConnectionRepository()
