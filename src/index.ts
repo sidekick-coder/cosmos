@@ -1,7 +1,5 @@
 import { resolve } from 'path'
 import { createCommander } from './core/commander/createCommander.js'
-import connection from './modules/connection/index.js'
-import docker from './modules/docker/index.js'
 import host from './modules/host/index.js'
 
 const commander = createCommander({
@@ -11,7 +9,7 @@ const commander = createCommander({
 
 commander.addFolder(resolve(import.meta.dirname, 'commands'))
 
-const modules = [connection, docker, host]
+const modules = [host]
 
 modules.forEach((module) => {
     module.setup({ commander })

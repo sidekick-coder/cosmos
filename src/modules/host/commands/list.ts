@@ -1,6 +1,5 @@
 import { defineCommand } from '@/core/commander/defineCommand.js'
 import { array } from '@/core/ui/array.js'
-import Host from '@/entities/Host.js'
 import HostRepository from '@/repositories/HostRepository.js'
 
 export default defineCommand({
