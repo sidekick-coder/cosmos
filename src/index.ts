@@ -2,6 +2,7 @@ import { resolve } from 'path'
 import { createCommander } from './core/commander/createCommander.js'
 import connection from './modules/connection/index.js'
 import docker from './modules/docker/index.js'
+import host from './modules/host/index.js'
 
 const commander = createCommander({
     bin: 'cosmos',
@@ -10,7 +11,7 @@ const commander = createCommander({
 
 commander.addFolder(resolve(import.meta.dirname, 'commands'))
 
-const modules = [connection, docker]
+const modules = [connection, docker, host]
 
 modules.forEach((module) => {
     module.setup({ commander })
@@ -27,7 +28,7 @@ const isRootCommand = registed.includes(firstArg)
 
 // If the first argument is not a registered command, we assume it's a host command
 if (!isRootCommand && !!firstArg) {
-    args.unshift('host')
+    args.unshift('host-module')
 }
 
 commander.handle(args)

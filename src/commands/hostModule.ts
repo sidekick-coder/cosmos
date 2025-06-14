@@ -3,11 +3,11 @@ import { defineCommand } from '@/core/commander/defineCommand.js'
 import { provide } from '@/core/di/index.js'
 import Host from '@/entities/Host.js'
 import sh from '@/modules-hosts/sh/index.js'
+import HostRepository from '@/repositories/HostRepository.js'
 
 export default defineCommand({
-    name: 'host',
+    name: 'host-module',
     description: 'Manage host commands',
-    disableHelp: true,
     options: {
         host: {
             type: 'arg',
@@ -17,7 +17,16 @@ export default defineCommand({
     execute: async ({ args, options }) => {
         const modules = [sh]
 
-        const host = new Host(options.host)
+        const repository = new HostRepository()
+
+        let host = repository.find(options.host)
+
+        if (!host) {
+            host = new Host({
+                Host: options.host,
+                Hostname: options.host,
+            })
+        }
 
         provide('host', host)
 
