@@ -2,7 +2,7 @@ import { createCommander } from '@/core/commander/index.js'
 import { defineModule } from '@/utils/defineModule.js'
 import { resolve } from 'path'
 
-const name = 'connection'
+const name = 'docker'
 
 export default defineModule({
     name: name,

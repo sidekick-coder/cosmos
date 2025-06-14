@@ -4,7 +4,7 @@ import ConnectionRepository from '@/repositories/ConnectionRepository.js'
 import { array } from '@/core/ui/array.js'
 
 export default defineCommand({
-    name: 'list-docker-containers',
+    name: 'list',
     description: 'List Docker containers on a remote host',
     execute: async () => {
         const connectionRepository = new ConnectionRepository()
@@ -15,6 +15,31 @@ export default defineCommand({
 
         const containers = await dokerContainerRepository.list()
 
-        array(containers)
+        array(containers, [
+            {
+                label: 'Connetion',
+                value: 'connection_id',
+                width: 10,
+            },
+            {
+                label: 'ID',
+                value: 'id',
+                width: 20,
+            },
+            {
+                label: 'Name',
+                value: 'name',
+                width: 20,
+            },
+            {
+                label: 'Image',
+                value: 'image',
+            },
+            {
+                label: 'Status',
+                value: 'status',
+                width: 10,
+            },
+        ])
     },
 })
