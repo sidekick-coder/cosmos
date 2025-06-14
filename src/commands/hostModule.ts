@@ -2,6 +2,7 @@ import { createCommander } from '@/core/commander/createCommander.js'
 import { defineCommand } from '@/core/commander/defineCommand.js'
 import { provide } from '@/core/di/index.js'
 import Host from '@/entities/Host.js'
+import docker from '@/modules-hosts/docker/index.js'
 import sh from '@/modules-hosts/sh/index.js'
 import HostRepository from '@/repositories/HostRepository.js'
 
@@ -15,7 +16,7 @@ export default defineCommand({
         },
     },
     execute: async ({ args, options }) => {
-        const modules = [sh]
+        const modules = [sh, docker]
 
         const repository = new HostRepository()
 
