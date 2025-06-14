@@ -1,5 +1,6 @@
 // This file is auto generated
 
+export * from './createCommandHelp.js'
 export * from './createCommander.js'
 export * from './createCommanderHelp.js'
 export * from './createHelpText.js'

@@ -1,6 +1,8 @@
 import type { Command, Config } from './types.js'
 import { createRequire } from 'module'
 import { parse } from './options.js'
+import { createCommanderHelp } from './createCommanderHelp.js'
+import { createCommandHelp } from './createCommandHelp.js'
 
 const require = createRequire(import.meta.url)
 
@@ -9,6 +11,8 @@ export interface Commander extends ReturnType<typeof createCommander> {}
 export function createCommander(config: Config = {}) {
     const commands: Command[] = []
     const subCommanders = new Map<string, Commander>()
+
+    commands.push(createCommanderHelp({ config, commands, getSubcommaners }))
 
     function add(...args: Command[]) {
         for (const command of args) {
@@ -47,6 +51,28 @@ export function createCommander(config: Config = {}) {
         return add(command)
     }
 
+    function addFolder(folder: string) {
+        const fs = config.fs || require('fs')
+        const path = require('path')
+
+        if (!fs.existsSync(folder)) {
+            throw new Error(`Folder not found: ${folder}`)
+        }
+
+        const files = fs.readdirSync(folder)
+
+        for (const file of files) {
+            const filePath = path.join(folder, file)
+
+            if (fs.statSync(filePath).isDirectory()) {
+                addFolder(filePath)
+                return
+            }
+
+            addFile(filePath)
+        }
+    }
+
     function getSubcommaners() {
         return subCommanders
     }
@@ -68,8 +94,10 @@ export function createCommander(config: Config = {}) {
     async function run(name: string, args = '') {
         let command = commands.find((command) => command.name === name)
 
-        if (!command && config.defaultCommand) {
-            command = commands.find((command) => command.name === config.defaultCommand)
+        const defaultCommand = config.defaultCommand || 'help'
+
+        if (!command && defaultCommand) {
+            command = commands.find((command) => command.name === defaultCommand)
         }
 
         if (!command) {
@@ -79,6 +107,11 @@ export function createCommander(config: Config = {}) {
         const ctx = {
             args: args.split(' '),
             options: parse(command.options || {}, args),
+        }
+
+        if ((args.includes('--help') || args.includes('-h')) && command.name !== 'help') {
+            console.log(createCommandHelp(command, { bin: config.bin }))
+            return
         }
 
         if (config.before) {
@@ -112,6 +145,7 @@ export function createCommander(config: Config = {}) {
 
         add,
         addFile,
+        addFolder,
         addSubCommander,
         addToSubCommander,
         getSubcommaners,

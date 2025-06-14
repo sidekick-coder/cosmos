@@ -3,7 +3,7 @@ import { array } from '@/core/ui/array.js'
 import ConnectionRepository from '@/repositories/ConnectionRepository.js'
 
 export default defineCommand({
-    name: 'list-connections',
+    name: 'list',
     description: 'List all connections',
     execute: async () => {
         const repository = new ConnectionRepository()
