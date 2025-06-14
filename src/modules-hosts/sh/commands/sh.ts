@@ -12,7 +12,9 @@ export default defineCommand({
 
         const shell = createShell(shellOptions)
 
-        const result = await shell.command(args.join(' '))
+        const argsWihoutEscape = args.filter((arg) => !arg.startsWith('--'))
+
+        const result = await shell.command(argsWihoutEscape.join(' '))
 
         console.log(result)
     },
