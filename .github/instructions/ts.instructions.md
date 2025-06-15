@@ -38,6 +38,12 @@ if (!condition) {
 }
 ```
 
+## trycatch
+
+Never use trycatch blocks unless is explicitly required by prompt.
+
+Instead use `tryCatch` utility in the `@/utils/tryCatch` to handle errors in a functional way.
+
 ##  Format
 
 Please always format code for maximum readability. That includes:
@@ -49,3 +55,4 @@ Please always format code for maximum readability. That includes:
 - Leaving empty lines before and after control structures (e.g., if, try/catch).
 - Grouping related code visually.
 - Keeping one statement per line.
+- use aliases for imports when necessary to avoid long paths.
