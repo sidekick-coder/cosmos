@@ -3,7 +3,7 @@ import { CosmosFileRepository } from '@/repositories/CosmosFileRepository.js'
 import * as path from 'path'
 import { tryCatch } from '@/utils/tryCatch.js'
 import type { CosmosFilesystem } from '@/gateways/createFs.js'
-import { StackFile } from '../entities/Stack.js'
+import Stack from '../entities/Stack.js'
 
 export class StackRepository {
     private fs: CosmosFilesystem
@@ -14,12 +14,12 @@ export class StackRepository {
         this.fs = this.fileRepo['fs']
     }
 
-    async list(): Promise<StackFile[]> {
+    async list(): Promise<Stack[]> {
         const content = await this.fileRepo.read('stacks.json')
 
         const [_e, parsed] = await tryCatch(async () => JSON.parse(content))
 
-        const stacks = [] as StackFile[]
+        const stacks = [] as Stack[]
 
         let files: string[] = []
         let folders: string[] = []
@@ -38,7 +38,7 @@ export class StackRepository {
         for (const f of files || []) {
             const folder = path.dirname(f)
 
-            const stack = new StackFile({
+            const stack = new Stack({
                 id: f,
                 folder: folder,
                 file: f,
@@ -51,28 +51,9 @@ export class StackRepository {
         return stacks
     }
 
-    async create(stack: any): Promise<void> {
-        const stacks = await this.list()
-
-        stacks.push(stack)
-
-        await this.fileRepo.write('stacks.json', JSON.stringify(stacks, null, 4))
-    }
-
-    async update(index: number, stack: any): Promise<void> {
-        const stacks = await this.list()
-
-        stacks[index] = stack
-
-        await this.fileRepo.write('stacks.json', JSON.stringify(stacks, null, 4))
-    }
-
-    async destroy(index: number): Promise<void> {
-        const stacks = await this.list()
-
-        stacks.splice(index, 1)
-
-        await this.fileRepo.write('stacks.json', JSON.stringify(stacks, null, 4))
+    async create(filename: string, content: string): Promise<void> {
+        await this.fs.write(filename, content)
+        await this.addFile(filename)
     }
 
     async addFile(filename: string): Promise<void> {
@@ -139,15 +120,27 @@ export class StackRepository {
         await this.fileRepo.write('stacks.json', JSON.stringify(stacks, null, 4))
     }
 
-    async find(query: string): Promise<StackFile | null> {
+    async find(query: string): Promise<Stack | null> {
         const stacks = await this.list()
 
-        for (const item of stacks) {
-            if (item.name === query || item.file === query) {
-                return item
-            }
+        const item = stacks.find((item) => item.name === query || item.file === query)
+
+        return item || null
+    }
+
+    async read(query: string): Promise<string | null> {
+        const item = await this.find(query)
+
+        if (!item) {
+            return null
         }
 
-        return null
+        const [error, content] = await tryCatch(() => this.fs.read(item.file))
+
+        if (error) {
+            return null
+        }
+
+        return content
     }
 }
