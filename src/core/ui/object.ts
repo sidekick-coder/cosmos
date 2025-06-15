@@ -11,6 +11,10 @@ export function object(output: any = {}, options: ObjectOptions = {}) {
     const valueWidth = Math.floor(screenWidth * 0.7)
 
     const table = new Table({
+        style: {
+            head: [], //disable colors in header cells
+            border: [], //disable colors for the border
+        },
         wordWrap: true,
         wrapOnWordBoundary: false,
         colWidths: [keyWidth, valueWidth],
