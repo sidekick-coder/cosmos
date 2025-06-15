@@ -7,8 +7,8 @@ import { input } from '@inquirer/prompts'
 export default defineCommand({
     name: 'add-folder',
     options: {
-        folderpath: {
-            type: 'flag',
+        folder: {
+            type: 'arg',
             description: 'Path to folder',
         },
     },
@@ -16,14 +16,14 @@ export default defineCommand({
         const host = inject<Host>('host')
         const repository = new StackRepository(host)
 
-        let folderpath = options.folderpath
+        let folder = options.folder
 
-        if (!folderpath) {
-            folderpath = await input({
+        if (!folder) {
+            folder = await input({
                 message: 'Enter the path to the folder:',
             })
         }
 
-        await repository.addFolder(folderpath)
+        await repository.addFolder(folder)
     },
 })

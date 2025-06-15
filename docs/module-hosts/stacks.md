@@ -54,7 +54,9 @@ cosmos myserver stacks create /opt/stacks/my-app/docker-compose.yml
 ```
 
 ## Edit
-Edit an `docker-compose.yml` file and/or its metadata (name, alias).
+Edit a `docker-compose.yml` file and/or its metadata (name, alias) in the host.
+
+This will prompt you to write a `docker-compose.yml` file that will be uploaded to the host if there is a change.
 
 **Arguments:**
 - `<query>`: Name or filename to edit.
@@ -64,48 +66,50 @@ Edit an `docker-compose.yml` file and/or its metadata (name, alias).
 cosmos myserver stacks edit my-app
 ```
 
-## Add-file
-Add a file to the stack.
+## Add file
+Register a file in the stack registry. 
+
+This will add the file to the `stacks.json` file in the host.
 
 **Options:**
-- `--filepath <path>` (flag): Path to file.
+- `<filename>`: Path to file.
 
 **Example:**
 ```sh
-cosmos myserver stacks add-file --filepath /opt/stacks/my-app/docker-compose.yml
+cosmos myserver stacks add-file /opt/stacks/my-app/docker-compose.yml
 ```
 
-## Add-folder
-Add a folder to the stack.
+## Add folder
+Add a folder to the stack registry.
 
 **Options:**
-- `--folderpath <path>` (flag): Path to folder.
+- `<folder>`: Path to folder.
 
 **Example:**
 ```sh
-cosmos myserver stacks add-folder --folderpath /mnt/ebs/stacks
+cosmos myserver stacks add-folder /mnt/ebs/stacks
 ```
 
-## Remove-file
-Remove a file from the stack.
+## Remove file
+Remove a file from the stack registry.
 
 **Options:**
-- `--filepath <path>` (flag): Path to file.
+- `<filename>`: Path to file.
 
 **Example:**
 ```sh
-cosmos myserver stacks remove-file --filepath ./local-file.txt
+cosmos myserver stacks remove-file /opt/stacks/my-app/docker-compose.yml
 ```
 
-## Remove-folder
-Remove a folder from the stack.
+## Remove folder
+Remove a folder from the stack registry.
 
 **Options:**
-- `--folderpath <path>` (flag): Path to folder.
+- `<folder>`: Path to folder.
 
 **Example:**
 ```sh
-cosmos myserver stacks remove-folder --folderpath ./my-folder
+cosmos myserver stacks remove-folder /mnt/ebs/stacks
 ```
 
 ## List

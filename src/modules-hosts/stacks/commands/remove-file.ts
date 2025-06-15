@@ -7,8 +7,8 @@ import { input } from '@inquirer/prompts'
 export default defineCommand({
     name: 'remove-file',
     options: {
-        filepath: {
-            type: 'flag',
+        filename: {
+            type: 'arg',
             description: 'Path to file',
         },
     },
@@ -16,14 +16,14 @@ export default defineCommand({
         const host = inject<Host>('host')
         const repository = new StackRepository(host)
 
-        let filepath = options.filepath
+        let filename = options.filename
 
-        if (!filepath) {
-            filepath = await input({
+        if (!filename) {
+            filename = await input({
                 message: 'Enter the path to the file:',
             })
         }
 
-        await repository.removeFile(filepath)
+        await repository.removeFile(filename)
     },
 })
