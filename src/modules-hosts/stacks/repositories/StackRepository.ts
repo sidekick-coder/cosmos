@@ -52,6 +52,8 @@ export class StackRepository {
     }
 
     async create(filename: string, content: string): Promise<void> {
+        const dirname = path.dirname(filename)
+        await this.fs.mkdir(dirname)
         await this.fs.write(filename, content)
         await this.addFile(filename)
     }
