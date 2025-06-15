@@ -6,22 +6,23 @@ import { input } from '@inquirer/prompts'
 import { createShell } from '@/gateways/createShell.js'
 
 export default defineCommand({
-    name: 'start',
+    name: 'stop',
     options: {
         query: {
             type: 'arg',
-            description: 'Stack to start',
+            description: 'Stack query to stop',
         },
     },
     async execute({ options }) {
         const host = inject<Host>('host')
         const repository = new StackRepository(host)
+        const shell = createShell(host)
 
         let query = options.query
 
         if (!query) {
             query = await input({
-                message: 'Enter the stack name or filename to start:',
+                message: 'Enter the stack to stop:',
             })
         }
 
@@ -32,10 +33,10 @@ export default defineCommand({
             return
         }
 
-        const shell = createShell(host)
-
-        await shell.command(`docker compose -f ${item.file} up -d`, {
+        await shell.command(`docker compose -f ${item.file} down`, {
             onData: (data) => process.stdout.write(data),
         })
+
+        console.log('Stack stopped.')
     },
 })
