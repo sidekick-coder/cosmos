@@ -28,3 +28,15 @@ This will list the contents of `/home/user` on the target host.
 
 - The command removes the `--` argument if present, to avoid issues with argument parsing.
 - Output from the remote shell is streamed live to your terminal.
+
+## Escaping Arguments
+
+If you need to pass arguments that might be interpreted by your shell (such as wildcards, spaces, or special characters), you should escape them or use `--` to separate the command from the arguments. This ensures the arguments are sent exactly as intended to the remote shell.
+
+For example, to check disk usage in human-readable format:
+
+```
+cosmos 192.168.1.10 sh -- df -h
+```
+
+The `--` tells Cosmos to treat everything after it as arguments for the remote command, preventing your local shell from interpreting them.
