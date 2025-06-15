@@ -1,4 +1,4 @@
-# Cosmos
+# Cosmos (Alpha)
 
 Cosmos is a CLI tool for managing infrastructure modules and resources, with a focus on SSH host management and extensibility.
 
