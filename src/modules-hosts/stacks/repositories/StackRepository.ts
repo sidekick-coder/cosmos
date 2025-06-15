@@ -145,4 +145,16 @@ export class StackRepository {
 
         return content
     }
+
+    async update(query: string, content: string): Promise<boolean> {
+        const item = await this.find(query)
+
+        if (!item) {
+            return false
+        }
+
+        await this.fs.write(item.file, content)
+
+        return true
+    }
 }
