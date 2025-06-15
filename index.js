@@ -24,7 +24,7 @@ args.push(
 NODE_OPTIONS.push('--disable-warning', 'ExperimentalWarning')
 
 if (isDev) {
-    NODE_OPTIONS.push('--import', 'file://' + require.resolve('tsx/esm'))
+    NODE_OPTIONS.push('--import', 'file://' + require.resolve('tsx'))
 
     envVars.TSX_TSCONFIG_PATH = path.join(import.meta.dirname, 'tsconfig.json')
 }
