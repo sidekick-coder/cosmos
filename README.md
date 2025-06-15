@@ -93,6 +93,7 @@ cosmos 192.168.1.10 sh free -h
 ## Available Host Modules
 
 - [sh](./module-hosts/sh.md): Execute shell commands on a specified host.
+- [docker](./module-hosts/docker.md): Run Docker CLI commands on a specified host (non-interactive only).
 
 ### SSH Host Resolution
 
