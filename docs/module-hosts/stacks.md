@@ -127,7 +127,7 @@ cosmos myserver stacks list
 Find a stack by name or filename in the stack registry.
 
 **Options:**
-- `<query>` (argument, alias: `-q`): Name or filename to search for.
+- `<query>`: Name or filename to search for.
 
 **Example:**
 ```sh
@@ -138,7 +138,7 @@ cosmos myserver stacks find --query my-app
 Read the content of a stack's `docker-compose.yml` file.
 
 **Options:**
-- `--query <query>` (flag, alias: `-q`): Name or filename to read.
+- `<query>`: Name or filename to read.
 
 **Example:**
 ```sh
@@ -149,7 +149,7 @@ cosmos myserver stacks read --query my-app.yml
 Start a stack by running `docker compose up -d` using the stack's `docker-compose.yml` file.
 
 **Options:**
-- `<query>` (argument): Stack to start.
+- `<query>`: Stack to start.
 
 **Example:**
 ```sh
@@ -160,7 +160,7 @@ cosmos myserver stacks start my-app
 Stop a stack by running `docker compose down` using the stack's `docker-compose.yml` file.
 
 **Options:**
-- `<query>` (argument): Stack query to stop.
+- `<query>`: Stack query to stop.
 
 **Example:**
 ```sh
@@ -171,7 +171,7 @@ cosmos myserver stacks stop my-app
 Restart a stack by running `docker compose down --remove-orphans` and then `docker compose up -d` using the stack's `docker-compose.yml` file.
 
 **Options:**
-- `<query>` (argument): Stack to restart.
+- `<query>`: Stack to restart.
 
 **Example:**
 ```sh

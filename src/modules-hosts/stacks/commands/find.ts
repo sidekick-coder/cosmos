@@ -10,7 +10,6 @@ export default defineCommand({
     options: {
         query: {
             type: 'arg',
-            alias: ['q'],
             description: 'Name or filename to search for',
         },
     },

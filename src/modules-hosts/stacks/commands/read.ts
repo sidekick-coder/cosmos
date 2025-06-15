@@ -9,7 +9,6 @@ export default defineCommand({
     options: {
         query: {
             type: 'flag',
-            alias: ['q'],
             description: 'Name or filename to read',
         },
     },
