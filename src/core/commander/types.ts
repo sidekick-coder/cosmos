@@ -27,4 +27,5 @@ export interface Config {
     before?: (options: ConfigHookOptions) => void
     after?: (options: ConfigHookOptions) => void
     fs?: typeof fs
+    createRequire?: (url: string | URL) => (id: string) => any
 }

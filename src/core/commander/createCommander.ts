@@ -1,14 +1,20 @@
 import type { Command, Config } from './types.js'
-import { createRequire } from 'module'
+import { createRequire as defaultCreateRequire } from 'module'
 import { parse } from './options.js'
 import { createCommanderHelp } from './createCommanderHelp.js'
 import { createCommandHelp } from './createCommandHelp.js'
 
-const require = createRequire(import.meta.url)
+import nodeFs from 'fs'
+import path from 'path'
 
 export interface Commander extends ReturnType<typeof createCommander> {}
 
 export function createCommander(config: Config = {}) {
+    const fs = config.fs || nodeFs
+    const require = config.createRequire
+        ? config.createRequire(import.meta.url)
+        : defaultCreateRequire(import.meta.url)
+
     const commands: Command[] = []
     const subCommanders = new Map<string, Commander>()
 
@@ -52,9 +58,6 @@ export function createCommander(config: Config = {}) {
     }
 
     function addFolder(folder: string) {
-        const fs = config.fs || require('fs')
-        const path = require('path')
-
         if (!fs.existsSync(folder)) {
             throw new Error(`Folder not found: ${folder}`)
         }
@@ -142,6 +145,17 @@ export function createCommander(config: Config = {}) {
         return run(name, rest.join(' '))
     }
 
+    function createSubCommander(name: string, options: Omit<Config, 'require' | 'fs'> = {}) {
+        const subCommander = createCommander({
+            ...config,
+            ...options,
+        })
+
+        addSubCommander(name, subCommander)
+
+        return subCommander
+    }
+
     return {
         commands,
         config,
@@ -154,5 +168,6 @@ export function createCommander(config: Config = {}) {
         getSubcommaners,
         run,
         handle,
+        createSubCommander,
     }
 }
