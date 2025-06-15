@@ -1,10 +1,11 @@
 import SSHConfig from 'ssh-config'
-import { existsSync, readFileSync } from 'fs'
+import { existsSync, readFileSync, writeFileSync } from 'fs'
 import { homedir } from 'os'
 import { join } from 'path'
 import Host from '@/entities/Host.js'
 
 const SSH_CONFIG_PATH = join(homedir(), '.ssh', 'config')
+
 let SSH_CONFIG_TEXT = ''
 
 if (existsSync(SSH_CONFIG_PATH)) {
@@ -41,6 +42,8 @@ export default class HostRepository {
             }
         }
 
+        console.log(hosts)
+
         return hosts
     }
 
@@ -50,5 +53,27 @@ export default class HostRepository {
         if (!config) return null
 
         return new Host(config)
+    }
+
+    public create(host: Host): void {
+        // TODO: Implement logic to add a new host to sshConfig and persist to SSH_CONFIG_PATH
+
+        sshConfig.append({
+            Host: host.Host || host.Hostname,
+            Hostname: host.Hostname,
+            User: host.User,
+            Port: host.Port,
+            IdentityFile: host.IdentityFile,
+        })
+
+        writeFileSync(SSH_CONFIG_PATH, SSHConfig.stringify(sshConfig))
+    }
+
+    public remove(name: string): void {
+        // TODO: Implement logic to remove a host from sshConfig and persist to SSH_CONFIG_PATH
+    }
+
+    public update(name: string, data: Partial<Host>): void {
+        // TODO: Implement logic to update a host in sshConfig and persist to SSH_CONFIG_PATH
     }
 }
