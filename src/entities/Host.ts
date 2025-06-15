@@ -25,7 +25,11 @@ export default class Host {
             port: this.Port ? parseInt(this.Port, 10) : undefined,
         }
 
-        const identityFile = this.IdentityFile ? this.IdentityFile.at(-1) : undefined
+        let identityFile = this.IdentityFile ? this.IdentityFile.at(-1) : undefined
+
+        if (identityFile && identityFile.startsWith('~')) {
+            identityFile = join(homedir(), identityFile.replace(/^~/, ''))
+        }
 
         if (existsSync(identityFile || '')) {
             options.privateKey = readFileSync(identityFile || '', 'utf-8')
