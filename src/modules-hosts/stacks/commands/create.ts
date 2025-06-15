@@ -12,7 +12,7 @@ export default defineCommand({
     name: 'create',
     options: {
         filename: {
-            type: 'flag',
+            type: 'arg',
             description: 'Name of the file to create',
         },
     },

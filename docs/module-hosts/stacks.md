@@ -22,124 +22,154 @@ cosmos [ip|alias|hostname] stacks [command] [args...]
 ```json
 {
   "files": [
-    "/home/ubuntu/my-app/docker-compose.yml"
+    "/home/ubuntu/apps/docker-compose.yml",
+    "/home/ubuntu/stacks/my-app/docker-compose.yml"
   ],
   "folders": [
     "/opt/stacks"
   ],
   "metadata": {
-    "/home/ubuntu/my-app/docker-compose.yml": {
-      "name": "app",
+    "/home/ubuntu/stacks/my-app/docker-compose.yml": {
+      "name": "my-app",
       "alias": [
-        "a"
+        "t"
       ]
-    },
-    "/opt/stacks/another-app/docker-compose.yml": {
-      "name": "another-app",
-      "alias": [
-        "ap"
-      ]
-    },
+    }
   }
 }
 ```
 
----
+## Create
 
-## Commands
+Create a new stack in the host 
 
-### create
-Create a new stack by registering a new `docker-compose.yml` file. The file is created and its content is stored.
+This will prompt you to write a `docker-compose.yml` file that will be uploaded to the host and registered in the `stacks.json` file.
 
-**Example:**
-```sh
-cosmos myserver stacks create --filename my-stack.yml
-```
-
-### edit
-Edit an existing stack's `docker-compose.yml` file and its metadata (name, alias).
+**Arguments:**
+- `<filename>`: Name of the file to create.
 
 **Example:**
 ```sh
-cosmos myserver stacks edit my-stack.yml
+cosmos myserver stacks create /opt/stacks/my-app/docker-compose.yml
 ```
 
-### add-file
+## Edit
+Edit an `docker-compose.yml` file and/or its metadata (name, alias).
+
+**Arguments:**
+- `<query>`: Name or filename to edit.
+
+**Example:**
+```sh
+cosmos myserver stacks edit my-app
+```
+
+## Add-file
 Add a file to the stack.
 
+**Options:**
+- `--filepath <path>` (flag): Path to file.
+
 **Example:**
 ```sh
-cosmos myserver stacks add-file --filepath ./local-file.txt
+cosmos myserver stacks add-file --filepath /opt/stacks/my-app/docker-compose.yml
 ```
 
-### add-folder
+## Add-folder
 Add a folder to the stack.
 
+**Options:**
+- `--folderpath <path>` (flag): Path to folder.
+
 **Example:**
 ```sh
-cosmos myserver stacks add-folder --folderpath ./my-folder
+cosmos myserver stacks add-folder --folderpath /mnt/ebs/stacks
 ```
 
-### remove-file
+## Remove-file
 Remove a file from the stack.
+
+**Options:**
+- `--filepath <path>` (flag): Path to file.
 
 **Example:**
 ```sh
 cosmos myserver stacks remove-file --filepath ./local-file.txt
 ```
 
-### remove-folder
+## Remove-folder
 Remove a folder from the stack.
+
+**Options:**
+- `--folderpath <path>` (flag): Path to folder.
 
 **Example:**
 ```sh
 cosmos myserver stacks remove-folder --folderpath ./my-folder
 ```
 
-### list
+## List
 List all stacks registered in the stack registry.
+
+**Options:**
+- (none)
 
 **Example:**
 ```sh
 cosmos myserver stacks list
 ```
 
-### find
+## Find
 Find a stack by name or filename in the stack registry.
 
+**Options:**
+- `<query>` (argument, alias: `-q`): Name or filename to search for.
+
 **Example:**
 ```sh
-cosmos myserver stacks find --query my-stack
+cosmos myserver stacks find --query my-app
 ```
 
-### read
+## Read
 Read the content of a stack's `docker-compose.yml` file.
 
+**Options:**
+- `--query <query>` (flag, alias: `-q`): Name or filename to read.
+
 **Example:**
 ```sh
-cosmos myserver stacks read --query my-stack.yml
+cosmos myserver stacks read --query my-app.yml
 ```
 
-### start
+## Start
 Start a stack by running `docker compose up -d` using the stack's `docker-compose.yml` file.
 
+**Options:**
+- `<query>` (argument): Stack to start.
+
 **Example:**
 ```sh
-cosmos myserver stacks start my-stack
+cosmos myserver stacks start my-app
 ```
 
-### stop
+## Stop
 Stop a stack by running `docker compose down` using the stack's `docker-compose.yml` file.
 
+**Options:**
+- `<query>` (argument): Stack query to stop.
+
 **Example:**
 ```sh
-cosmos myserver stacks stop my-stack
+cosmos myserver stacks stop my-app
 ```
 
-### restart
+## Restart
 Restart a stack by running `docker compose down --remove-orphans` and then `docker compose up -d` using the stack's `docker-compose.yml` file.
+
+**Options:**
+- `<query>` (argument): Stack to restart.
 
 **Example:**
 ```sh
-cosmos myserver stacks restart my-stack
+cosmos myserver stacks restart my-app
 ```
