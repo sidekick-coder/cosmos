@@ -14,12 +14,17 @@ export default defineCommand({
             {
                 label: 'Host',
                 value: 'Host',
-                width: 30,
+                width: 20,
+            },
+            {
+                label: 'Hostname',
+                value: 'Hostname',
+                width: 20,
             },
             {
                 label: 'User',
                 value: 'User',
-                width: 15,
+                width: 10,
             },
             {
                 label: 'Port',

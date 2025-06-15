@@ -42,8 +42,6 @@ export default class HostRepository {
             }
         }
 
-        console.log(hosts)
-
         return hosts
     }
 
@@ -56,8 +54,6 @@ export default class HostRepository {
     }
 
     public create(host: Host): void {
-        // TODO: Implement logic to add a new host to sshConfig and persist to SSH_CONFIG_PATH
-
         sshConfig.append({
             Host: host.Host || host.Hostname,
             Hostname: host.Hostname,
@@ -70,10 +66,34 @@ export default class HostRepository {
     }
 
     public remove(name: string): void {
-        // TODO: Implement logic to remove a host from sshConfig and persist to SSH_CONFIG_PATH
+        const host = this.find(name)
+
+        if (!host) {
+            throw new Error(`Host "${name}" not found`)
+        }
+
+        sshConfig.remove({ Host: host.Host || host.Hostname })
+
+        writeFileSync(SSH_CONFIG_PATH, SSHConfig.stringify(sshConfig))
     }
 
     public update(name: string, data: Partial<Host>): void {
-        // TODO: Implement logic to update a host in sshConfig and persist to SSH_CONFIG_PATH
+        const host = this.find(name)
+
+        if (!host) {
+            throw new Error(`Host "${name}" not found`)
+        }
+
+        sshConfig.remove({ Host: host.Host || host.Hostname })
+
+        sshConfig.append({
+            Host: data.Host || host.Host || host.Hostname,
+            Hostname: data.Hostname || host.Hostname,
+            User: data.User || host.User,
+            Port: data.Port || host.Port,
+            IdentityFile: data.IdentityFile || host.IdentityFile,
+        })
+
+        writeFileSync(SSH_CONFIG_PATH, SSHConfig.stringify(sshConfig))
     }
 }
