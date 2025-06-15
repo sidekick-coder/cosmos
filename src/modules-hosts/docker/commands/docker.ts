@@ -1,16 +1,14 @@
 import { defineCommand } from '@/core/commander/defineCommand.js'
 import { inject } from '@/core/di/index.js'
-import { createShell } from '@/core/ssh/createShell.js'
 import type Host from '@/entities/Host.js'
+import { createShell } from '@/gateways/createShell.js'
 
 export default defineCommand({
     name: 'docker',
     execute: async ({ args }) => {
         const host = inject<Host>('host')
 
-        const shellOptions = host.toShellOptions()
-
-        const shell = createShell(shellOptions)
+        const shell = createShell(host)
 
         const argsWihoutEscape = args.filter((arg) => arg !== '--')
 
@@ -20,8 +18,8 @@ export default defineCommand({
             console.log('[cosmos] run command:', finalArgs.join(' '))
         }
 
-        const result = await shell.command(finalArgs.join(' '))
-
-        console.log(result)
+        await shell.command(finalArgs.join(' '), {
+            onData: (data) => process.stdout.write(data),
+        })
     },
 })

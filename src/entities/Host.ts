@@ -1,4 +1,4 @@
-import { readFileSync } from 'fs'
+import { existsSync, readFileSync } from 'fs'
 import { homedir } from 'os'
 import { join } from 'path'
 import type { CreateShellOptions } from '@/core/ssh/createShell.js'
@@ -8,7 +8,7 @@ export default class Host {
     public Host?: string
     public User?: string
     public Port?: string
-    public IdentityFile?: string
+    public IdentityFile?: string[]
 
     constructor(data: Partial<Host>) {
         this.Hostname = data.Hostname
@@ -25,16 +25,20 @@ export default class Host {
             port: this.Port ? parseInt(this.Port, 10) : undefined,
         }
 
-        if (this.IdentityFile) {
-            let identityFile = Array.isArray(this.IdentityFile)
-                ? this.IdentityFile[0]
-                : this.IdentityFile
+        const identityFile = this.IdentityFile ? this.IdentityFile.at(-1) : undefined
 
-            identityFile = identityFile.startsWith('~')
-                ? join(homedir(), identityFile.slice(1))
-                : identityFile
+        if (existsSync(identityFile || '')) {
+            options.privateKey = readFileSync(identityFile || '', 'utf-8')
+        }
 
-            options.privateKey = readFileSync(identityFile, 'utf-8')
+        // use id_rsa if no identity file is provided
+        if (!options.privateKey && existsSync(join(homedir(), '.ssh', 'id_rsa'))) {
+            options.privateKey = readFileSync(join(homedir(), '.ssh', 'id_rsa'), 'utf-8')
+        }
+
+        // use id_ed25519 if no identity file is provided
+        if (!options.privateKey && existsSync(join(homedir(), '.ssh', 'id_ed25519'))) {
+            options.privateKey = readFileSync(join(homedir(), '.ssh', 'id_ed25519'), 'utf-8')
         }
 
         return options
