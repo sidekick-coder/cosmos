@@ -3,6 +3,11 @@ import { Client } from 'ssh2'
 
 export interface CreateClientOptions extends ConnectConfig {}
 
+export interface ExecuteOptions {
+    onData?: (data: string) => void
+    onStderr?: (data: string) => void
+}
+
 export function createClient(options: CreateClientOptions) {
     const connection = new Client()
 
@@ -22,7 +27,7 @@ export function createClient(options: CreateClientOptions) {
         })
     }
 
-    function exec(command: string): Promise<string> {
+    async function exec(command: string, opts?: ExecuteOptions): Promise<string> {
         return new Promise((resolve, reject) => {
             connection.on('ready', () => {
                 connection.exec(command, (err, stream) => {
@@ -46,10 +51,12 @@ export function createClient(options: CreateClientOptions) {
 
                     stream.on('data', (data: Buffer) => {
                         stdout += data.toString()
+                        opts?.onData?.(data.toString())
                     })
 
                     stream.stderr.on('data', (data: Buffer) => {
                         stderr += data.toString()
+                        opts?.onStderr?.(data.toString())
                     })
                 })
             })
