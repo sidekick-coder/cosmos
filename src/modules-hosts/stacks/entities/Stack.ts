@@ -1,8 +1,8 @@
 export default class Stack {
+    public name: string
     public folder: string
     public file: string
-    public id: string
-    public name: string
+    public alias?: string[]
     public content?: string
 
     constructor(data: Partial<Stack>) {

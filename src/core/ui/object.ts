@@ -1,16 +1,26 @@
 import Table from 'cli-table3'
 
-export function object(output: any = {}) {
+interface ObjectOptions {
+    keyWidth?: number
+    excludeKeys?: string[]
+}
+
+export function object(output: any = {}, options: ObjectOptions = {}) {
     const screenWidth = process.stdout.columns || 80
+    const keyWidth = options.keyWidth || Math.floor(screenWidth * 0.2)
+    const valueWidth = Math.floor(screenWidth * 0.7)
 
     const table = new Table({
         wordWrap: true,
         wrapOnWordBoundary: false,
-        colWidths: [Math.floor(screenWidth * 0.2), Math.floor(screenWidth * 0.7)],
+        colWidths: [keyWidth, valueWidth],
     })
 
     for (const key of Object.keys(output)) {
-        table.push([key, output[key]])
+        if (options.excludeKeys && options.excludeKeys.includes(key)) {
+            continue
+        }
+        table.push([key, String(output[key])])
     }
 
     console.log(table.toString())

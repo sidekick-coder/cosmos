@@ -18,11 +18,17 @@ export default defineCommand({
         array(stacks, [
             {
                 label: 'Name',
-                value: (stack) => stack.name,
+                value: 'name',
+                width: 20,
             },
             {
                 label: 'File',
-                value: (stack) => stack.file,
+                value: 'file',
+            },
+            {
+                label: 'Alias',
+                value: (stack) => stack.alias?.join(', ') || 'None',
+                width: 10,
             },
         ])
     },

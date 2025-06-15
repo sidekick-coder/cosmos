@@ -23,10 +23,12 @@ export class StackRepository {
 
         let files: string[] = []
         let folders: string[] = []
+        let metadata: Record<string, any> = {}
 
         if (parsed) {
             files = parsed.files || []
             folders = parsed.folders || []
+            metadata = parsed.metadata || {}
         }
 
         for (const folder of folders) {
@@ -38,17 +40,39 @@ export class StackRepository {
         for (const f of files || []) {
             const folder = path.dirname(f)
 
+            const meta = metadata[f] || {}
+
             const stack = new Stack({
-                id: f,
+                name: meta.name || path.basename(folder),
                 folder: folder,
                 file: f,
-                name: path.basename(folder),
+                alias: meta.alias || [],
             })
 
             stacks.push(stack)
         }
 
         return stacks
+    }
+
+    async find(query: string): Promise<Stack | null> {
+        const stacks = await this.list()
+
+        const item = stacks.find((item) => {
+            if (item.name === query) {
+                return true
+            }
+
+            if (item.file === query) {
+                return true
+            }
+
+            if (item.alias && item.alias.includes(query)) {
+                return true
+            }
+        })
+
+        return item || null
     }
 
     async create(filename: string, content: string): Promise<void> {
@@ -122,14 +146,6 @@ export class StackRepository {
         await this.fileRepo.write('stacks.json', JSON.stringify(stacks, null, 4))
     }
 
-    async find(query: string): Promise<Stack | null> {
-        const stacks = await this.list()
-
-        const item = stacks.find((item) => item.name === query || item.file === query)
-
-        return item || null
-    }
-
     async read(query: string): Promise<string | null> {
         const item = await this.find(query)
 
@@ -156,5 +172,21 @@ export class StackRepository {
         await this.fs.write(item.file, content)
 
         return true
+    }
+
+    /**
+     * Update the metadata for a given filename in stacks.json
+     * @param filename The file whose metadata to update
+     * @param metadata The metadata object to set
+     */
+    async updateMetadata(filename: string, metadata: Record<string, any>): Promise<void> {
+        const content = await this.fileRepo.read('stacks.json')
+        const [_e, parsed] = await tryCatch(async () => JSON.parse(content))
+        const stacks = parsed || {}
+        if (typeof stacks.metadata !== 'object' || stacks.metadata === null) {
+            stacks.metadata = {}
+        }
+        stacks.metadata[filename] = metadata
+        await this.fileRepo.write('stacks.json', JSON.stringify(stacks, null, 4))
     }
 }

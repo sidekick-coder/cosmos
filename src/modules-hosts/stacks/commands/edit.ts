@@ -7,6 +7,7 @@ import { tmpdir } from 'os'
 import { join } from 'path'
 import { promises as fs } from 'fs'
 import { randomUUID } from 'crypto'
+import { spawnSync } from 'child_process'
 
 export default defineCommand({
     name: 'edit',
@@ -35,17 +36,51 @@ export default defineCommand({
             return
         }
 
+        // Prompt for name and alias before editing
+        const newName = await input({
+            message: `Edit name [${item.name}]:`,
+            default: item.name || '',
+        })
+
+        const aliasInput = await input({
+            message: `Edit alias (comma separated) [${(item.alias || []).join(',')}] :`,
+            default: (item.alias || []).join(','),
+        })
+
+        const newAlias = aliasInput
+            .split(',')
+            .map((a) => a.trim())
+            .filter(Boolean)
+
         const content = await repository.read(query)
+
         const tmpFile = join(tmpdir(), `cosmos-edit-tmp-${randomUUID()}`)
+
         await fs.writeFile(tmpFile, content || '')
 
         const editor = process.env.EDITOR || 'vi'
-        const { spawnSync } = await import('child_process')
+
         spawnSync(editor, [tmpFile], { stdio: 'inherit' })
 
         const newContent = await fs.readFile(tmpFile, 'utf8')
-        await repository.update(query, newContent)
         await fs.unlink(tmpFile)
+
+        if (newContent !== content) {
+            console.log('Changes file content, updating...')
+
+            await repository.update(query, newContent)
+        }
+
+        const metadataChanged =
+            newName !== item.name || JSON.stringify(newAlias) !== JSON.stringify(item.alias || [])
+
+        if (metadataChanged) {
+            console.log('Updating metadata...')
+            await repository.updateMetadata(item.file, {
+                name: newName,
+                alias: newAlias,
+            })
+        }
 
         console.log(`File '${item.file}' updated in stack.`)
     },

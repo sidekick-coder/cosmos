@@ -9,7 +9,7 @@ export default defineCommand({
     name: 'find',
     options: {
         query: {
-            type: 'flag',
+            type: 'arg',
             alias: ['q'],
             description: 'Name or filename to search for',
         },
@@ -33,6 +33,8 @@ export default defineCommand({
             return
         }
 
-        object(result)
+        object(result, {
+            excludeKeys: ['content'],
+        })
     },
 })
