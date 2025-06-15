@@ -63,3 +63,58 @@ The host module lets you manage SSH host entries in your `~/.ssh/config` file.
 - `update <name>`: Update a host entry. Only provided fields are updated; prompts for missing alias.
 
 For full documentation, see [docs/modules/host.md](docs/modules/host.md).
+
+## Host Modules
+
+Host Modules are modules that can execute one or more actions on a VPS (Virtual Private Server) via SSH. They allow you to interact with remote hosts by running commands or performing operations directly on the server using its IP address, alias, or hostname.
+
+To run a host module, use the following syntax:
+
+```
+cosmos [ip|alias|hostname] <module> [command] [args...]
+```
+
+- `[ip|alias|hostname]`: The target host's IP address, alias, or hostname.
+- `<module>`: The host module you want to use (e.g., `sh`).
+- `[command] [args...]`: The command and its arguments for the module.
+
+### Examples using the `sh` module
+
+List files in a directory:
+```
+cosmos 192.168.1.10 sh ls -la /home/user
+```
+
+Check free memory on the host:
+```
+cosmos 192.168.1.10 sh free -h
+```
+
+## Available Host Modules
+
+- [sh](./module-hosts/sh.md): Execute shell commands on a specified host.
+
+### SSH Host Resolution
+
+Cosmos uses your `~/.ssh/config` file to resolve hosts and ssh keys. This means you can use any alias or host defined in your SSH config instead of typing the full IP address each time.
+
+For example, if your `~/.ssh/config` contains:
+
+```
+Host myserver
+    HostName 192.168.1.10
+    User ubuntu
+
+Host another-server
+    HostName 192.168.1.12
+    User ubuntu
+    IdentityFile ~/.ssh/another_key
+```
+
+You can run a command using the alias:
+
+```
+cosmos myserver sh ls -la /home/ubuntu
+```
+
+This will connect to `192.168.1.10` as user `ubuntu` using the settings from your SSH config.
