@@ -1,63 +1,65 @@
-# Todo
+# Cosmos
 
-- [] make ssh shell.command stream output as it comes in to simulate a real terminal
+Cosmos is a CLI tool for managing infrastructure modules and resources, with a focus on SSH host management and extensibility.
 
-## Modules 
+## Features
+- Modular command system
+- Manage SSH hosts in `~/.ssh/config`
+- Module for shell commands
+- Module for docker containers management
+- Module for stacks (docker-compose) management
 
-### Docker module
-A module to manage docker commands on all registered hosts.
+## Installation
 
-This will work a little different since user will need to tell a list of hosts to run the command on.
+### Global Installation (Recommended)
 
-Hosts will be saved in $HOME/.cosmos/docker/hosts.json file, and user can add or remove hosts from this file.
+Install packages globally using npm:
 
-it will be possible to list all containers in all registered hosts, start, stop, remove containers, and more.
-
-## Host modules
-
-### Apps module 
-A module to list, add, update, and remove apps from the host.
-
-It will based on docker compose files
-
-For example will have a folder in the target vps with the following structure:
-
-```
-root/
-├── resources/
-├──── app-1.service.yaml
-├──── app-2.service.yaml
-├──── db.service.yaml
-├──── caddy.service.yaml
-└── docker-compose.yaml
-```
-When deploying the app will generate the docker-compose.yaml file based on the services and resources defined in the other files.
-
-Also will generate the caddy.json file what user will use to configure to expose.
-
-Since all apps will live in the same docker network, they will be able to communicate with each other using the service name as hostname.
-
-And the user can expose the app using caddy, nginx, or any other reverse proxy.
-
-### Docker stacks
-
-A module to manage docker stacks or docker compose files on the host.
-
-It will allow the user to create, update, and remove stacks from the host.
-
-It will have a folder in the target vps that will container an array of files and folders where there are docker compose files
-
-/etc/cosmos/stacks/files.json 
-```json
-{
-    "files": [
-        "/mnt/ebs/another/docker-compose.yaml",
-    ],
-    "folders": [
-        "/opt/stacks",
-        "/home/ubuntu/stacks"
-    ]
-  
-}
+```sh
+npm install -g @sidekick-coder/cosmos
 ```
 
+Register the `cosmos` alias in your shell:
+
+```sh
+# ~/.bashrc or ~/.zshrc
+alias cosmos="node $(npm root -g)/@sidekick-coder/cosmos/index.js"
+```
+
+Source your shell configuration:
+
+```sh
+source ~/.bashrc  # or source ~/.zshrc
+```
+
+
+Now you can run cosmos commands directly:
+
+```sh
+cosmos host list
+```
+
+### NPX
+
+With NPX there's no need to installation, you can just run the commands directly:
+
+```sh
+npx @sidekick-coder/cosmos [command]
+```
+
+Example:
+```sh
+npx @sidekick-coder/cosmos host list
+```
+
+## Host Module (Summary)
+
+The host module lets you manage SSH host entries in your `~/.ssh/config` file.
+
+- `create`: Add a new host. Prompts for missing required fields.
+- `list`: Show all hosts in a table.
+- `show <host>`: Show details for a specific host.
+- `remove <name>`: Remove a host entry (prompts if not provided).
+- `update <name>`: Update a host entry. Only provided fields are updated; prompts for missing alias.
+
+For full documentation, see [docs/modules/host.md](docs/modules/host.md).
