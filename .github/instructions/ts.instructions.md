@@ -56,3 +56,25 @@ Please always format code for maximum readability. That includes:
 - Grouping related code visually.
 - Keeping one statement per line.
 - use aliases for imports when necessary to avoid long paths.
+
+## Entity 
+- Use `class` to define entities.
+- Use `public` and `private` to define properties and methods.
+- Use `constructor` to initialize properties.
+- Use `Partial<T>` to define properties that can be optional in the constructor.
+- Use `Object.assign(this, data)` to assign properties from an object to the class instance.
+
+Example
+```ts
+class MyEntity {
+    public id: string;
+    public name: string;
+    public description?: string;
+    public createdAt: Date;
+    public updatedAt: Date;
+
+    constructor(data: Partial<MyEntity>) {
+        Object.assign(this, data);
+    }
+}
+```

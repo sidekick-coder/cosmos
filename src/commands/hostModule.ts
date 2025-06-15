@@ -4,6 +4,7 @@ import { provide } from '@/core/di/index.js'
 import Host from '@/entities/Host.js'
 import docker from '@/modules-hosts/docker/index.js'
 import sh from '@/modules-hosts/sh/index.js'
+import stacks from '@/modules-hosts/stacks/index.js'
 import HostRepository from '@/repositories/HostRepository.js'
 
 export default defineCommand({
@@ -16,7 +17,7 @@ export default defineCommand({
         },
     },
     execute: async ({ args, options }) => {
-        const modules = [sh, docker]
+        const modules = [sh, docker, stacks]
 
         const repository = new HostRepository()
 

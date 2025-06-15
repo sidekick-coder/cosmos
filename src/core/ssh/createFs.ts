@@ -15,7 +15,9 @@ export function createFs(options: CreateShellOptions) {
     }
 
     async function write(path: string, content: string): Promise<void> {
-        await command(`echo ${JSON.stringify(content)} > ${path}`)
+        const contentWithEscapedQuotes = content.replace(/"/g, '\\"')
+
+        await command(`echo "${contentWithEscapedQuotes}" > ${path}`)
     }
 
     async function mkdir(path: string): Promise<void> {
