@@ -6,12 +6,14 @@ It allows you to list, run, remove, and restart containers on any host that has 
 
 ## Register a Host for Containers
 
-Before managing containers, you must register a host to let Cosmos know it has Docker installed:
+This command does not install Docker or connect to the host. It simply tells Cosmos that a host defined in your `~/.ssh/config` file has Docker installed via hosts metadata.
+
+Before managing containers, you must register a host:
 
 ```sh
 cosmos container register <host>
 ```
-- `<host>`: The IP, hostname, or alias of the host.
+- `<host>`: The IP, hostname, or alias of the host (as defined in your SSH config).
 
 This marks the host as Docker-enabled in Cosmos. To unregister a host:
 

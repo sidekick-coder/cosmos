@@ -2,41 +2,39 @@
 
 The host module provides commands to manage SSH host entries in your `~/.ssh/config` file. Each command is described below.
 
----
+## Create a Host
 
-## create
+This command allows you to create a new host entry in your SSH config.
 
-**Description:**  
-Create a new host entry in `~/.ssh/config`.
-
-**Usage:**  
+### Usage
 ```sh
-cosmos host create [--host <alias>] [--hostname <hostname>] [--user <username>] [--port <port>] [--identity-file <path>]
+cosmos host create --host <host> --hostname <hostname> --user <username> [--port <port>] [--identity-file <path>]
 ```
-
-**Flags:**
+### Options
 - `--host, -h`: Host alias (required)
 - `--hostname, -hn`: Hostname (IP or domain) (required)
 - `--user, -u`: Username (required)
 - `--port, -p`: Port (default: 22)
 - `--identity-file, -i`: Path to private key (default: `~/.ssh/id_rsa`)
 
-**Behavior:**  
+**Behavior:**
 If any required flag is missing, you will be prompted to provide it interactively.
 
----
+### Example
+Create a host entry for `myserver`:
+```sh
+cosmos host create --host myserver --hostname 192.168.1.10 --user ubuntu
+```
 
-## list
+## List Hosts
 
-**Description:**  
-List all hosts in your `~/.ssh/config`.
+This command lists all hosts in your SSH config.
 
-**Usage:**  
+### Usage
 ```sh
 cosmos host list
 ```
-
-**Behavior:**  
+### Output
 Displays a table with the following columns:
 - Host
 - Hostname
@@ -44,65 +42,75 @@ Displays a table with the following columns:
 - Port
 - IdentityFile
 
----
+### Example
+List all hosts:
+```sh
+cosmos host list
+```
 
-## show
+## Show Host
 
-**Description:**  
-Show details of a specific host in `~/.ssh/config`.
+This command shows details of a specific host in your SSH config.
 
-**Usage:**  
+### Usage
 ```sh
 cosmos host show <host>
 ```
-
-**Arguments:**
+### Arguments
 - `<host>`: The host alias to show details for.
 
-**Behavior:**  
+### Output
 Displays all details for the specified host.
 
----
-
-## remove
-
-**Description:**  
-Remove a host entry from `~/.ssh/config`.
-
-**Usage:**  
+### Example
+Show details for `myserver`:
 ```sh
-cosmos host remove <name>
+cosmos host show myserver
 ```
 
-**Arguments:**
+## Remove Host
+
+This command removes a host entry from your SSH config.
+
+### Usage
+```sh
+cosmos host remove <host>
+```
+### Arguments
 - `<name>`: Host alias to remove.
 
-**Behavior:**  
+**Behavior:**
 If the alias is not provided, you will be prompted to enter it.
 
----
-
-## update
-
-**Description:**  
-Update an existing host entry in `~/.ssh/config`.
-
-**Usage:**  
+### Example
+Remove the host entry for `myserver`:
 ```sh
-cosmos host update <name> [--host <alias>] [--hostname <hostname>] [--user <username>] [--port <port>] [--identity-file <path>]
+cosmos host remove myserver
 ```
 
-**Arguments:**
+## Update Host
+
+This command updates an existing host entry in your SSH config.
+
+### Usage
+```sh
+cosmos host update <host> [--user <username>] [--port <port>] [--host <alias>] [--hostname <hostname>] [--identity-file <path>]
+```
+### Arguments
 - `<name>`: Host alias to update.
 
-**Flags:**
+### Options
 - `--host, -h`: Host alias
 - `--hostname, -h`: Hostname (IP or domain)
 - `--user, -u`: Username
 - `--port, -p`: Port
 - `--identity-file, -i`: Path to private key
 
-**Behavior:**  
+**Behavior:**
 If the alias is not provided, you will be prompted to enter it. Only the provided fields will be updated.
 
----
+### Example
+Update the user and port for `myserver`:
+```sh
+cosmos host update myserver --user admin --port 2222
+```
