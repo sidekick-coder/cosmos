@@ -22,8 +22,8 @@ export async function tryCatch<T extends TryerAsync>(tryer: T): Promise<TryCatch
 tryCatch.sync = function <T extends Tryer>(tryer: T): TryCatchResult<T> {
     try {
         const result = tryer()
-        return [result, null]
+        return [null, result]
     } catch (error) {
-        return [null, error]
+        return [error, null]
     }
 }

@@ -3,6 +3,7 @@ import { existsSync, readFileSync, writeFileSync } from 'fs'
 import { homedir } from 'os'
 import { join } from 'path'
 import Host from '@/entities/Host.js'
+import { CosmosFileRepository } from './CosmosFileRepository.js'
 
 const SSH_CONFIG_PATH = join(homedir(), '.ssh', 'config')
 
@@ -15,8 +16,16 @@ if (existsSync(SSH_CONFIG_PATH)) {
 const sshConfig = SSHConfig.parse(SSH_CONFIG_TEXT)
 
 export default class HostRepository {
-    public list(): Host[] {
+    public fileRepo: CosmosFileRepository
+
+    constructor() {
+        this.fileRepo = CosmosFileRepository.local()
+    }
+
+    public async list() {
         const hosts: Host[] = []
+
+        const metadata = await this.fileRepo.readJson<Record<string, any>>('hosts.json')
 
         const defaultConfig = sshConfig.compute('*')
 
@@ -32,12 +41,13 @@ export default class HostRepository {
                 for (const name of names) {
                     const computed = sshConfig.compute(name)
 
-                    hosts.push(
-                        new Host({
-                            ...defaultConfig,
-                            ...computed,
-                        })
-                    )
+                    const host = new Host({
+                        ...defaultConfig,
+                        ...computed,
+                        metadata: metadata?.[name] || {},
+                    })
+
+                    hosts.push(host)
                 }
             }
         }
@@ -45,8 +55,10 @@ export default class HostRepository {
         return hosts
     }
 
-    public find(name: string): Host {
-        const config = sshConfig.compute(name)
+    public async find(name: string) {
+        const all = await this.list()
+
+        const config = all.find((host) => host.Host === name || host.Hostname === name)
 
         if (!config || !config.Host) {
             return new Host({
@@ -70,8 +82,8 @@ export default class HostRepository {
         writeFileSync(SSH_CONFIG_PATH, SSHConfig.stringify(sshConfig))
     }
 
-    public remove(name: string): void {
-        const host = this.find(name)
+    public async remove(name: string) {
+        const host = await this.find(name)
 
         if (!host) {
             throw new Error(`Host "${name}" not found`)
@@ -82,8 +94,8 @@ export default class HostRepository {
         writeFileSync(SSH_CONFIG_PATH, SSHConfig.stringify(sshConfig))
     }
 
-    public update(name: string, data: Partial<Host>): void {
-        const host = this.find(name)
+    public async update(name: string, data: Partial<Host>) {
+        const host = await this.find(name)
 
         if (!host) {
             throw new Error(`Host "${name}" not found`)
@@ -100,5 +112,22 @@ export default class HostRepository {
         })
 
         writeFileSync(SSH_CONFIG_PATH, SSHConfig.stringify(sshConfig))
+    }
+
+    public async updateMetadata(name: string, metadata: Record<string, any>) {
+        const host = await this.find(name)
+
+        if (!host) {
+            throw new Error(`Host "${name}" not found`)
+        }
+
+        const currentMetadata = this.fileRepo.readJson<Record<string, any>>('hosts.json') || {}
+
+        currentMetadata[name] = {
+            ...currentMetadata[name],
+            ...metadata,
+        }
+
+        await this.fileRepo.writeJson('hosts.json', currentMetadata)
     }
 }

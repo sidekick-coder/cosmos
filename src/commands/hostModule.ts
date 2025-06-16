@@ -21,19 +21,15 @@ export default defineCommand({
 
         const repository = new HostRepository()
 
-        let host = repository.find(options.host)
-
-        if (!host) {
-            host = new Host({
-                Host: options.host,
-                Hostname: options.host,
-            })
-        }
+        const host = await repository.find(options.host)
 
         provide('host', host)
 
         const commander = createCommander({
             bin: `cosmos ${options.host}`,
+            before({ ctx }) {
+                ctx.host = host
+            },
         })
 
         for (const m of modules) {

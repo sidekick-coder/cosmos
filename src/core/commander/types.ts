@@ -4,6 +4,7 @@ import type fs from 'fs'
 export interface CommandContext<T extends OptionRecord = OptionRecord> {
     args: string[]
     options: ParseResult<T>
+    [key: string]: any
 }
 
 export interface Command<T extends OptionRecord = OptionRecord> {

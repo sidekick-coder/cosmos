@@ -2,7 +2,6 @@ import { defineCommand } from '@/core/commander/defineCommand.js'
 import { input } from '@inquirer/prompts'
 import SourceRepository from '../../repositories/SourceRepository.js'
 import HostRepository from '@/repositories/HostRepository.js'
-import Host from '@/entities/Host.js'
 import { createShell } from '@/gateways/createShell.js'
 
 export default defineCommand({

@@ -9,6 +9,7 @@ export default class Host {
     public User?: string
     public Port?: string
     public IdentityFile?: string[]
+    public metadata = {} as Record<string, any>
 
     constructor(data: Partial<Host>) {
         this.Hostname = data.Hostname
@@ -16,6 +17,7 @@ export default class Host {
         this.User = data.User
         this.Port = data.Port
         this.IdentityFile = data.IdentityFile
+        this.metadata = data.metadata || {}
     }
 
     public toShellOptions(): CreateShellOptions {

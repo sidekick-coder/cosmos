@@ -36,11 +36,34 @@ export class CosmosFileRepository {
         return result
     }
 
+    async readJson<T>(arg: string): Promise<T | null> {
+        const content = await this.read(arg)
+
+        if (!content) {
+            return null
+        }
+
+        const [error, json] = tryCatch.sync(() => JSON.parse(content))
+
+        if (error) {
+            console.error(`Error parsing JSON from ${arg}:`, error)
+            return null
+        }
+
+        return json as T
+    }
+
     async write(arg: string, content: string): Promise<void> {
         const filename = path.join(this.cosmosDir, arg)
         const dirname = path.dirname(filename)
 
         await this.fs.mkdir(dirname)
         await this.fs.write(filename, content)
+    }
+
+    async writeJson<T>(arg: string, data: T): Promise<void> {
+        const content = JSON.stringify(data, null, 4)
+
+        await this.write(arg, content)
     }
 }
