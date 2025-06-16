@@ -28,8 +28,12 @@ export function createShell(options: CreateShellOptions) {
         return new Promise((resolve, reject) => {
             client.connect()
 
+            const options = {
+                term: 'xterm-256color',
+            }
+
             conn.on('ready', () => {
-                conn.shell((err, stream) => {
+                conn.shell(options, (err, stream) => {
                     if (err) {
                         client.disconnect()
                         reject(err)

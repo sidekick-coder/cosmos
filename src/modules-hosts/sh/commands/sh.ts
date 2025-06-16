@@ -10,8 +10,15 @@ export default defineCommand({
 
         const shell = createShell(host)
 
-        const argsWihoutEscape = args.filter((arg) => arg !== '--')
+        const argsWihoutEscape = args.filter((arg) => arg !== '--').filter(Boolean)
 
-        await shell.interactive(argsWihoutEscape.join(' '))
+        if (!argsWihoutEscape.length) {
+            console.error('No command provided. Please specify a command to run.')
+            return
+        }
+
+        await shell.command(argsWihoutEscape.join(' '), {
+            pty: true,
+        })
     },
 })

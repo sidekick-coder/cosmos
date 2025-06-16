@@ -3,6 +3,7 @@ import { createShell as createSshShell, type CreateShellOptions } from '@/core/s
 import { spawn } from 'child_process'
 
 export interface CosmosShellCommandOptions {
+    pty?: boolean
     onData?: (data: string) => void
 }
 
@@ -16,6 +17,7 @@ export function createSSHCosmosShell(options: CreateShellOptions): CosmosShell {
 
     async function command(args: string, _options?: CosmosShellCommandOptions): Promise<string> {
         return await ssh.command(args, {
+            pty: _options?.pty,
             onData: (data) => {
                 _options?.onData?.(data)
             },

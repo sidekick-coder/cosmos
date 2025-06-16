@@ -18,8 +18,10 @@ export default defineCommand({
             console.log('[cosmos] run command:', finalArgs.join(' '))
         }
 
+        // add exit
+
         await shell.command(finalArgs.join(' '), {
-            onData: (data) => process.stdout.write(data),
+            pty: true,
         })
     },
 })

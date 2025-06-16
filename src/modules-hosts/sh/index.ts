@@ -8,7 +8,6 @@ const __dirname = dirname(__filename)
 export default defineHostModule({
     name: 'sh',
     setup({ commander }) {
-        commander.addFile(resolve(__dirname, 'commands/command.js'))
         commander.addFile(resolve(__dirname, 'commands/sh.js'))
     },
 })

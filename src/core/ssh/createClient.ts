@@ -4,6 +4,7 @@ import { Client } from 'ssh2'
 export interface CreateClientOptions extends ConnectConfig {}
 
 export interface ExecuteOptions {
+    pty?: boolean
     onData?: (data: string) => void
     onStderr?: (data: string) => void
 }
@@ -30,7 +31,7 @@ export function createClient(options: CreateClientOptions) {
     async function exec(command: string, opts?: ExecuteOptions): Promise<string> {
         return new Promise((resolve, reject) => {
             connection.on('ready', () => {
-                connection.exec(command, (err, stream) => {
+                connection.exec(command, { pty: true }, (err, stream) => {
                     if (err) {
                         connection.end()
                         reject(err)
@@ -40,14 +41,12 @@ export function createClient(options: CreateClientOptions) {
                     let stdout = ''
                     let stderr = ''
 
-                    stream.on('close', (code: number, _signal: string) => {
-                        connection.end()
-                        if (code === 0) {
-                            resolve(stdout)
-                            return
-                        }
-                        reject(new Error(stderr || `Command failed with code ${code}`))
-                    })
+                    if (opts?.pty) {
+                        process.stdin.setRawMode(true)
+                        process.stdin.resume()
+                        process.stdin.pipe(stream)
+                        stream.pipe(process.stdout)
+                    }
 
                     stream.on('data', (data: Buffer) => {
                         stdout += data.toString()
@@ -57,6 +56,20 @@ export function createClient(options: CreateClientOptions) {
                     stream.stderr.on('data', (data: Buffer) => {
                         stderr += data.toString()
                         opts?.onStderr?.(data.toString())
+                    })
+
+                    stream.on('close', (code: number, _signal: string) => {
+                        if (opts?.pty) {
+                            process.stdin.setRawMode(false)
+                            process.stdin.unpipe(stream)
+                        }
+
+                        connection.end()
+                        if (code === 0) {
+                            resolve(stdout)
+                            return
+                        }
+                        reject(new Error(stderr || `Command failed with code ${code}`))
                     })
                 })
             })
