@@ -4,7 +4,6 @@ import HostRepository from '@/repositories/HostRepository.js'
 import type Container from '../entities/Container.js'
 import ContainerRepository from '../repositories/ContainerRepository.js'
 import { tryCatch } from '@/utils/tryCatch.js'
-import Host from '@/entities/Host.js'
 
 export default defineCommand({
     name: 'list',

@@ -2,8 +2,8 @@ import { defineCommand } from '@/core/commander/defineCommand.js'
 import HostRepository from '@/repositories/HostRepository.js'
 
 export default defineCommand({
-    name: 'register',
-    description: 'Tell cosmos that host have docker installed and should be checked for containers',
+    name: 'unregister',
+    description: 'Tell cosmos to not check for containers on the host',
     options: {
         host: {
             type: 'arg',
@@ -15,9 +15,9 @@ export default defineCommand({
         const host = await hostRepository.find(options.host)
 
         await hostRepository.updateMetadata(host.Host, {
-            docker: true,
+            docker: false,
         })
 
-        console.log(`Registered: ${host.Host}`)
+        console.log(`Uregistered: ${host.Host}`)
     },
 })
