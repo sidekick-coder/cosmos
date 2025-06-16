@@ -20,13 +20,15 @@ cosmos [ip|alias|hostname] docker [command] [args...]
   ```sh
   cosmos myserver docker version
   ```
-
-> **Warning**: Interactive shells (e.g., `docker run -it ...` or `docker exec -it ...`) are not supported at this time. Running such commands may not work as expected.
-
-### Debugging
-
-Set the `COSMOS_DEBUG` environment variable to see the full command being executed:
-
-```sh
-COSMOS_DEBUG=1 cosmos my-server docker ps
-```
+- Run a new container:
+  ```sh
+  cosmos myserver docker run --rm --name hello-world hello-world
+  ```
+- Run a interactive shell in a container:
+  ```sh
+  cosmos myserver docker exec -it ubuntu bash
+  ```
+- Run a interactive shell in a tmp container:
+  ```sh
+  cosmos myserver docker run -it ubuntu bash
+  ```

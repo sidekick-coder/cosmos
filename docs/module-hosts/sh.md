@@ -2,32 +2,23 @@
 
 The `sh` host module provides a command to execute shell commands on a specified host.
 
-## Command: `sh`
+The command is run in the context of the host, and the output is streamed directly to your terminal.
 
-### Description
+## Usage
 
-Executes a shell command on the target host. The command is run in the context of the host, and the output is streamed directly to your terminal.
-
-### Usage
-
-```
+```sh
 cosmos [ip|alias|hostname] sh [command] [args...]
 ```
 
 - `[command] [args...]`: The shell command and its arguments to execute on the host.
 
-### Example
+**Example**
 
-```
+```sh
 cosmos 192.168.1.10 sh ls -la /home/user
 ```
 
 This will list the contents of `/home/user` on the target host.
-
-### Notes
-
-- The command removes the `--` argument if present, to avoid issues with argument parsing.
-- Output from the remote shell is streamed live to your terminal.
 
 ## Escaping Arguments
 
@@ -35,8 +26,20 @@ If you need to pass arguments that might be interpreted by your shell (such as w
 
 For example, to check disk usage in human-readable format:
 
-```
+```sh
 cosmos 192.168.1.10 sh -- df -h
 ```
 
 The `--` tells Cosmos to treat everything after it as arguments for the remote command, preventing your local shell from interpreting them.
+
+## Interactive Shell Access
+
+To enter an interactive shell session on a host, simply omit the command and arguments after `sh` and specify the shell you want to use (e.g., `bash`, `sh`, `zsh`). This will start an interactive shell on the target host, allowing you to run commands as if you were logged in directly.
+
+**Example**
+
+```sh
+cosmos 192.168.1.10 sh bash
+```
+
+This will open an interactive Bash shell on the host at `192.168.1.10`. You can now run commands interactively as if you were logged in via SSH.
