@@ -2,6 +2,7 @@ import { resolve } from 'path'
 import { createCommander } from './core/commander/createCommander.js'
 import host from './modules/host/index.js'
 import nebula from './modules/nebula/index.js'
+import container from './modules/container/index.js'
 
 const commander = createCommander({
     bin: 'cosmos',
@@ -10,7 +11,7 @@ const commander = createCommander({
 
 commander.addFolder(resolve(import.meta.dirname, 'commands'))
 
-const modules = [host, nebula]
+const modules = [host, container, nebula]
 
 modules.forEach((module) => {
     module.setup({ commander })

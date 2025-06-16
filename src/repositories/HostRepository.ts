@@ -121,13 +121,17 @@ export default class HostRepository {
             throw new Error(`Host "${name}" not found`)
         }
 
-        const currentMetadata = this.fileRepo.readJson<Record<string, any>>('hosts.json') || {}
+        let all = await this.fileRepo.readJson<Record<string, any>>('hosts.json')
 
-        currentMetadata[name] = {
-            ...currentMetadata[name],
+        if (!all) {
+            all = {}
+        }
+
+        all[name] = {
+            ...all[name],
             ...metadata,
         }
 
-        await this.fileRepo.writeJson('hosts.json', currentMetadata)
+        await this.fileRepo.writeJson('hosts.json', all)
     }
 }
