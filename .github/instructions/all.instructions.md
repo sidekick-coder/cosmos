@@ -40,3 +40,36 @@ export default defineCommand({
   },
 })
 ```
+
+## Docs
+
+When writing documentation for commands, follow this example structure:
+
+For this example, we will use the `cosmos container run` command.
+
+```markdown
+## Run a Container
+
+This command allows you to run a new container on a specified host.
+
+### Usage
+
+```sh
+cosmos container run --hostname <host> [options]
+```
+### Options
+
+- `--hostname, -h`: The hostname, IP, or alias of the target host. If not provided, you will be prompted for it.
+
+### Examples 
+
+Run a hello world container on a registered host:
+```sh
+cosmos container run --h myserver --rm myserver hello-world
+```
+Run a temporary Ubuntu container with an interactive shell:
+```sh
+cosmos container run --h myserver --rm -it ubuntu bash
+```
+
+```
