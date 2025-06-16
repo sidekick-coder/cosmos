@@ -1,7 +1,7 @@
 {
   "name": "@sidekick-coder/cosmos",
   "description": "CLI tool to manage vps servers with a focus on simplicity and ease of use.",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "license": "MIT",
   "type": "module",
   "author": "Henrique <henrique@sidekick-coder.com>",
@@ -16,11 +16,11 @@
     "@sidekick-coder/cosmos": "./index.js"
   },
   "scripts": {
-     "lint": "eslint",
-        "build": "tsup",
-        "test": "vitest --typecheck",
-        "preversion": "npm run lint && npm run test",
-        "prepublishOnly": "npm run build && npm run test"
+    "lint": "eslint",
+    "build": "tsup",
+    "test": "vitest --typecheck",
+    "preversion": "npm run lint && npm run test",
+    "prepublishOnly": "npm run build && npm run test"
   },
   "keywords": [],
   "dependencies": {
