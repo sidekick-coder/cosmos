@@ -1,10 +1,6 @@
 import { CosmosFileRepository } from '@/repositories/CosmosFileRepository.js'
 import { tryCatch } from '@/utils/tryCatch.js'
-
-export interface Source {
-    host: string
-    description?: string
-}
+import Source from '../entities/Source.js'
 
 export interface NebulaConfig {
     sources: Source[]
@@ -28,7 +24,9 @@ export default class SourceRepository {
         if (error) return []
 
         const config: NebulaConfig = result
-        if (config.sources) return config.sources
+        if (config.sources) {
+            return config.sources.map((s) => new Source(s))
+        }
 
         return []
     }
@@ -41,15 +39,11 @@ export default class SourceRepository {
 
     async update(host: string, payload: Partial<Source>): Promise<void> {
         const sources = await this.list()
-
         const source = sources.find((s) => s.host === host)
-
         if (!source) {
             throw new Error(`Source with host ${host} not found`)
         }
-
         source.description = payload.description ?? source.description
-
         await this.save(sources)
     }
 

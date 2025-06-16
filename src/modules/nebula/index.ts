@@ -10,13 +10,18 @@ export default defineModule({
             bin: name,
         })
 
-        main.addFolder(resolve(import.meta.dirname, 'commands/containers'))
-
-        // source
-        const source = main.createSubCommander('sources', {
-            bin: `nebula sources`,
+        // container
+        const container = main.createSubCommander('container', {
+            bin: `nebula container`,
         })
 
-        source.addFolder(resolve(import.meta.dirname, 'commands/sources'))
+        container.addFolder(resolve(import.meta.dirname, 'commands/container'))
+
+        // source
+        const source = main.createSubCommander('source', {
+            bin: `nebula source`,
+        })
+
+        source.addFolder(resolve(import.meta.dirname, 'commands/source'))
     },
 })

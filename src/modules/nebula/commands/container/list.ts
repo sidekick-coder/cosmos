@@ -4,7 +4,7 @@ import HostRepository from '@/repositories/HostRepository.js'
 
 export default defineCommand({
     name: 'list',
-    description: 'List containers',
+    description: 'List containers from sources',
     execute: async () => {
         const repository = new HostRepository()
 
