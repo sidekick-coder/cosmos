@@ -52,9 +52,9 @@ Example:
 npx @sidekick-coder/cosmos host list
 ```
 
-## Host Module (Summary)
+## Global Host Module (Summary)
 
-The host module lets you manage SSH host entries in your `~/.ssh/config` file.
+This module lets you manage SSH host entries in your `~/.ssh/config` file.
 
 - `create`: Add a new host. Prompts for missing required fields.
 - `list`: Show all hosts in a table.
@@ -63,6 +63,19 @@ The host module lets you manage SSH host entries in your `~/.ssh/config` file.
 - `update <name>`: Update a host entry. Only provided fields are updated; prompts for missing alias.
 
 For full documentation, see [docs/modules/host.md](docs/modules/host.md).
+
+## Global Container Module (Summary)
+
+This lets you manage Docker containers across your registered hosts, it is useful to have an overview of all containers running on all your hosts, and to manage them easily.
+
+- `register <host>`: Register a host as Docker-enabled.
+- `unregister <host>`: Unregister a host from Docker management.
+- `list`: List all containers across registered hosts.
+- `run --hostname <host> [options]`: Run a new container on a host. Prompts for missing required flags.
+- `remove --hostname <host> <container1> [<container2> ...]`: Remove one or more containers from a host.
+- `restart [--hosts <host1,host2,...>] [--names <container1,container2,...>]`: Restart containers on one or more hosts. Prompts for confirmation if no filters are provided.
+
+For full documentation, see [docs/modules/container.md](docs/modules/container.md).
 
 ## Host Modules
 
