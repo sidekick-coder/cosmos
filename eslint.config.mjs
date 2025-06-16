@@ -7,6 +7,9 @@ export default [
     importPlugin.flatConfigs.recommended,
     importPlugin.flatConfigs.typescript,
     {
+        ignores: ['dist', 'node_modules'],
+    },
+    {
         rules: {
             '@typescript-eslint/consistent-type-imports': 'error',
             'import/no-unresolved': 'off',
