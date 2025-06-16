@@ -13,6 +13,7 @@ export function createShell(options: CreateShellOptions) {
 
             return await client.exec(args, opt)
         } catch (error) {
+            console.error('[ssh.shell]:', error)
             client.disconnect()
             throw error
         } finally {

@@ -48,7 +48,7 @@ export default class HostRepository {
     public find(name: string): Host | null {
         const config = sshConfig.compute(name)
 
-        if (!config) return null
+        if (!config || !config.Host) return null
 
         return new Host(config)
     }
