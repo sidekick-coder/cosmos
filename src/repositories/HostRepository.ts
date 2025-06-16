@@ -29,6 +29,15 @@ export default class HostRepository {
 
         const defaultConfig = sshConfig.compute('*')
 
+        // add localhost
+        hosts.push(
+            new Host({
+                Host: 'localhost',
+                Hostname: 'localhost',
+                metadata: metadata?.localhost || {},
+            })
+        )
+
         for (const config of sshConfig) {
             if (
                 config.type === 1 &&
