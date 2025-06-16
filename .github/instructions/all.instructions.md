@@ -23,14 +23,13 @@ When flags are need but where not defined ask the user to define them using `inq
 export default defineCommand({
   name: 'example',
   description: 'Example command',
-  flags: {
+  options: {
     requiredFlag: {
-      type: 'string',
+      type: 'flag',
       description: 'This flag is required',
-      required: true,
     },
   },
-  action: async (options) => {
+  execute: async (options) => {
     let requiredFlag = options.requiredFlag 
     
     if (!requiredFlag) {

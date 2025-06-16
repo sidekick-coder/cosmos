@@ -1,6 +1,7 @@
-import type Host from '@/entities/Host.js'
+import Host from '@/entities/Host.js'
 import { createFs, type CosmosFilesystem } from '@/gateways/createFs.js'
 import { tryCatch } from '@/utils/tryCatch.js'
+import { homedir } from 'os'
 import path from 'path'
 
 export class CosmosFileRepository {
@@ -11,6 +12,16 @@ export class CosmosFileRepository {
     constructor(host: Host) {
         this.host = host
         this.fs = createFs(host)
+
+        if (host.Host === 'localhost') {
+            this.cosmosDir = path.join(homedir(), '.cosmos')
+        }
+    }
+
+    static local(): CosmosFileRepository {
+        const host = new Host({ Host: 'localhost' })
+
+        return new CosmosFileRepository(host)
     }
 
     async read(arg: string): Promise<string | null> {
