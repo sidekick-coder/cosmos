@@ -19,12 +19,12 @@ export default class ContainerRepository {
             const name = data.Names
 
             return new Container({
+                id: `${this.host.Host || this.host.Hostname || ''}:${name}`,
                 containerId: data.ID,
                 name: name,
                 image: data.Image,
                 status: data.Status,
                 host: this.host.Hostname || this.host.Host || '',
-                nebulaId: `${this.host.Host || this.host.Hostname || ''}:${name}`,
                 createdAt: data.CreatedAt,
             })
         })
