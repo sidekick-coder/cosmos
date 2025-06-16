@@ -21,7 +21,49 @@ export function createShell(options: CreateShellOptions) {
         }
     }
 
+    async function interactive(initialCommand?: string): Promise<void> {
+        const client = createClient(options)
+        const conn = client.connection
+
+        return new Promise((resolve, reject) => {
+            client.connect()
+
+            conn.on('ready', () => {
+                conn.shell((err, stream) => {
+                    if (err) {
+                        client.disconnect()
+                        reject(err)
+                        return
+                    }
+
+                    if (initialCommand) {
+                        stream.write(initialCommand + '\n')
+                    }
+
+                    process.stdin.setRawMode?.(true)
+                    process.stdin.resume()
+                    process.stdin.pipe(stream)
+                    stream.pipe(process.stdout)
+                    stream.stderr.pipe(process.stderr)
+
+                    stream.on('close', () => {
+                        process.stdin.setRawMode?.(false)
+                        process.stdin.unpipe(stream)
+                        client.disconnect()
+                        resolve()
+                    })
+
+                    stream.on('error', (error) => {
+                        client.disconnect()
+                        reject(error)
+                    })
+                })
+            })
+        })
+    }
+
     return {
         command,
+        interactive,
     }
 }

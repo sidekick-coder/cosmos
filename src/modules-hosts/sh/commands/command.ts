@@ -4,7 +4,7 @@ import type Host from '@/entities/Host.js'
 import { createShell } from '@/gateways/createShell.js'
 
 export default defineCommand({
-    name: 'sh',
+    name: 'command',
     execute: async ({ args }) => {
         const host = inject<Host>('host')
 
@@ -12,6 +12,8 @@ export default defineCommand({
 
         const argsWihoutEscape = args.filter((arg) => arg !== '--')
 
-        await shell.interactive(argsWihoutEscape.join(' '))
+        await shell.command(argsWihoutEscape.join(' '), {
+            onData: (data) => process.stdout.write(data),
+        })
     },
 })

@@ -8,6 +8,7 @@ export interface CosmosShellCommandOptions {
 
 export interface CosmosShell {
     command(args: string, options?: CosmosShellCommandOptions): Promise<string>
+    interactive(initialCommand?: string): Promise<void>
 }
 
 export function createSSHCosmosShell(options: CreateShellOptions): CosmosShell {
@@ -24,8 +25,13 @@ export function createSSHCosmosShell(options: CreateShellOptions): CosmosShell {
         })
     }
 
+    async function interactive(initialCommand?: string): Promise<void> {
+        return ssh.interactive(initialCommand)
+    }
+
     return {
         command,
+        interactive,
     }
 }
 
@@ -53,14 +59,37 @@ export function createLocalCosmosShell(): CosmosShell {
             child.on('close', (code) => {
                 if (code === 0) {
                     resolve(output)
+                    return
                 }
                 reject(new Error(`Process exited with code ${code}`))
             })
         })
     }
 
+    async function interactive(initialCommand?: string): Promise<void> {
+        return new Promise((resolve, reject) => {
+            const shell = spawn(process.env.SHELL || 'bash', {
+                stdio: 'inherit',
+                shell: true,
+            })
+
+            if (initialCommand) {
+                shell.stdin?.write(initialCommand + '\n')
+            }
+
+            shell.on('close', () => {
+                resolve()
+            })
+
+            shell.on('error', (err) => {
+                reject(err)
+            })
+        })
+    }
+
     return {
         command,
+        interactive,
     }
 }
 

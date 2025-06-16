@@ -1,10 +1,14 @@
 import { defineHostModule } from '@/utils/defineHostModule.js'
-import sh from './commands/sh.js'
+import { dirname, resolve } from 'path'
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
 export default defineHostModule({
     name: 'sh',
-    description: 'Manage shell commands on the host',
     setup({ commander }) {
-        commander.add(sh)
+        commander.addFile(resolve(__dirname, 'commands/command.js'))
+        commander.addFile(resolve(__dirname, 'commands/sh.js'))
     },
 })
