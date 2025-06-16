@@ -45,10 +45,15 @@ export default class HostRepository {
         return hosts
     }
 
-    public find(name: string): Host | null {
+    public find(name: string): Host {
         const config = sshConfig.compute(name)
 
-        if (!config || !config.Host) return null
+        if (!config || !config.Host) {
+            return new Host({
+                Host: name,
+                Hostname: name,
+            })
+        }
 
         return new Host(config)
     }

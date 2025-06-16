@@ -31,6 +31,14 @@ export default class SourceRepository {
         return []
     }
 
+    async find(host: string): Promise<Source | null> {
+        const sources = await this.list()
+
+        const source = sources.find((s) => s.host === host)
+
+        return source ? new Source(source) : null
+    }
+
     async create(source: Source): Promise<void> {
         const sources = await this.list()
         sources.push(source)

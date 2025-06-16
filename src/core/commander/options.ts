@@ -25,14 +25,13 @@ export type OptionRecordOutput<T extends OptionRecord> =
     { [K in keyof T]: OptionOutput<T[K]> }
 /* eslint-enable prettier/prettier */
 
+export type ParseResult<T extends OptionRecord> = OptionRecordOutput<T> & { _unknown: string[] }
+
 export function defineOptions<T extends OptionRecord>(options: T): T {
     return options
 }
 
-export function parse<T extends OptionRecord>(
-    options: T,
-    payload: string
-): OptionRecordOutput<T> & { _unknown: string[] } {
+export function parse<T extends OptionRecord>(options: T, payload: string): ParseResult<T> {
     const result: Record<string, any> = {}
 
     const all: (Option & { key: string; name: string })[] = []

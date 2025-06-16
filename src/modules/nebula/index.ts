@@ -12,14 +12,14 @@ export default defineModule({
 
         // container
         const container = main.createSubCommander('container', {
-            bin: `nebula container`,
+            bin: `cosmos nebula container`,
         })
 
         container.addFolder(resolve(import.meta.dirname, 'commands/container'))
 
         // source
         const source = main.createSubCommander('source', {
-            bin: `nebula source`,
+            bin: `cosmos nebula source`,
         })
 
         source.addFolder(resolve(import.meta.dirname, 'commands/source'))

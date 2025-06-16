@@ -112,7 +112,7 @@ export function createCommander(config: Config = {}) {
             options: parse(command.options || {}, args),
         }
 
-        const isHelp = ctx.args.some((arg) => arg === '--help' || arg === '-h')
+        const isHelp = ctx.args.some((arg) => arg === '--help')
         const hasEscape = ctx.args.some((arg) => arg.startsWith('--'))
 
         if (isHelp && command.name !== 'help' && !hasEscape) {

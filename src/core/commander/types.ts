@@ -1,9 +1,9 @@
-import type { OptionRecord, OptionRecordOutput } from './options.js'
+import type { OptionRecord, ParseResult } from './options.js'
 import type fs from 'fs'
 
 export interface CommandContext<T extends OptionRecord = OptionRecord> {
     args: string[]
-    options: OptionRecordOutput<T>
+    options: ParseResult<T>
 }
 
 export interface Command<T extends OptionRecord = OptionRecord> {
