@@ -1,7 +1,7 @@
 {
   "name": "@sidekick-coder/cosmos",
   "description": "CLI tool to manage vps servers with a focus on simplicity and ease of use.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
   "type": "module",
   "author": "Henrique <henrique@sidekick-coder.com>",
