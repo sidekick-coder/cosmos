@@ -3,6 +3,7 @@ import EntryRepository from '../repositories/EntryRepository.js'
 import Entry from '../entities/Entry.js'
 import qs from 'qs'
 import HostRepository from 'dist/repositories/HostRepository.js'
+import { object } from '@/core/ui/object.js'
 
 export default defineCommand({
     name: 'create',
@@ -51,6 +52,8 @@ export default defineCommand({
 
         await entryRepository.create(entry)
 
-        console.log(`Entry created for host ${host.Host}:`, entry)
+        entry.host = host.Host
+
+        object(entry)
     },
 })
