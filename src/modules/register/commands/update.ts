@@ -1,5 +1,5 @@
 import { defineCommand } from '@/core/commander/index.js'
-import { EntryRepository } from '../repositories/EntryRepository.js'
+import EntryRepository from '../repositories/EntryRepository.js'
 import HostRepository from 'dist/repositories/HostRepository.js'
 import qs from 'qs'
 import { object } from '@/core/ui/object.js'

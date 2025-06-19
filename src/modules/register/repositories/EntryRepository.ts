@@ -2,7 +2,7 @@ import type Host from '@/entities/Host.js'
 import { CosmosFileRepository } from '@/repositories/CosmosFileRepository.js'
 import Entry from '../entities/Entry.js'
 
-export class EntryRepository {
+export default class EntryRepository {
     private fileRepo: CosmosFileRepository
 
     constructor(public host: Host) {
@@ -10,13 +10,13 @@ export class EntryRepository {
     }
 
     async list(): Promise<Entry[]> {
-        const entries = await this.fileRepo.readJson<any[]>('register.json')
+        const json = await this.fileRepo.readJson<any[]>('register.json')
 
-        if (!entries) {
+        if (!json) {
             return []
         }
 
-        return entries.map(
+        return json.map(
             (entry) =>
                 new Entry({
                     ...entry,

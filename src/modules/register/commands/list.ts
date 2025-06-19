@@ -1,5 +1,5 @@
 import { defineCommand } from '@/core/commander/index.js'
-import { EntryRepository } from '../repositories/EntryRepository.js'
+import EntryRepository from '../repositories/EntryRepository.js'
 import type Entry from '../entities/Entry.js'
 import HostRepository from 'dist/repositories/HostRepository.js'
 import { array } from '@/core/ui/array.js'
