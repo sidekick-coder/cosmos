@@ -134,15 +134,21 @@ export function createCommander(config: Config = {}) {
     }
 
     async function handle(args: string[]) {
-        const [name, ...rest] = args
+        const schema = {
+            name: {
+                type: 'arg',
+            },
+        } as const
 
-        const subCommander = subCommanders.get(name)
+        const options = parse(schema, args.join(' '))
+
+        const subCommander = subCommanders.get(options.name)
 
         if (subCommander) {
-            return subCommander.handle(rest)
+            return subCommander.handle(options._unknown)
         }
 
-        return run(name, rest.join(' '))
+        return run(options.name, options._unknown.join(' '))
     }
 
     function createSubCommander(name: string, options: Omit<Config, 'require' | 'fs'> = {}) {
