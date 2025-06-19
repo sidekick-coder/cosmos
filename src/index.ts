@@ -3,6 +3,7 @@ import { createCommander } from './core/commander/createCommander.js'
 import host from './modules/host/index.js'
 import container from './modules/container/index.js'
 import stack from './modules/stack/index.js'
+import register from './modules/register/index.js'
 
 const commander = createCommander({
     bin: 'cosmos',
@@ -11,7 +12,7 @@ const commander = createCommander({
 
 commander.addFolder(resolve(import.meta.dirname, 'commands'))
 
-const modules = [host, container, stack]
+const modules = [host, register, container, stack]
 
 modules.forEach((module) => {
     module.setup({ commander })
