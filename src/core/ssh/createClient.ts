@@ -69,7 +69,7 @@ export function createClient(options: CreateClientOptions) {
                             resolve(stdout)
                             return
                         }
-                        reject(new Error(stderr || `Command failed with code ${code}`))
+                        reject(new Error(stderr || `Command "${command}" failed with code ${code}`))
                     })
                 })
             })

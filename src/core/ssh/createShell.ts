@@ -11,13 +11,16 @@ export function createShell(options: CreateShellOptions) {
         try {
             client.connect()
 
-            return await client.exec(args, opt)
-        } catch (error) {
-            console.error('[ssh.shell]:', error)
-            client.disconnect()
-            throw error
-        } finally {
+            const result = await client.exec(args, opt)
+
             await client.disconnect()
+
+            return result
+        } catch (error) {
+            await client.disconnect()
+
+            console.error('[ssh.shell]:', error)
+            throw error
         }
     }
 
