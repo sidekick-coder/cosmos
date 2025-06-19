@@ -47,15 +47,6 @@ export default defineCommand({
                 label: 'IdentityFile',
                 value: 'IdentityFile',
             },
-            {
-                label: 'Metadata',
-                value: (host) => {
-                    return Object.entries(host.metadata || {})
-                        .map(([key, value]) => `${key}=${value}`)
-                        .join(', ')
-                },
-                width: 30,
-            },
         ])
     },
 })

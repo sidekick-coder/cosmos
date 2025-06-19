@@ -136,10 +136,19 @@ export default class HostRepository {
             all = {}
         }
 
-        all[name] = {
-            ...all[name],
-            ...metadata,
-        }
+        const newMetadata = all[name] || {}
+
+        Object.keys(metadata).forEach((key) => {
+            if (metadata[key] === undefined || metadata[key] === null) {
+                return delete newMetadata[key]
+            }
+
+            newMetadata[key] = metadata[key]
+        })
+
+        all[name] = newMetadata
+
+        console.log(newMetadata)
 
         await this.fileRepo.writeJson('hosts.json', all)
     }
