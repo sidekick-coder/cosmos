@@ -9,7 +9,6 @@ export default defineCommand({
         host: {
             type: 'arg',
             description: 'Hostname (IP or domain)',
-            alias: ['h'],
         },
         key: {
             type: 'arg',

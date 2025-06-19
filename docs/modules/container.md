@@ -4,21 +4,20 @@ The container module in Cosmos provides commands to manage Docker containers acr
 
 It allows you to list, run, remove, and restart containers on any host that has Docker installed.
 
-## Register a Host for Containers
+## Register a Host to use Module
 
-This command does not install Docker or connect to the host. It simply tells Cosmos that a host defined in your `~/.ssh/config` file has Docker installed via hosts metadata.
-
-Before managing containers, you must register a host:
+Before managing containers, you must tell cosmos that the host has Docker installed. This is done by setting a host metadata with the following command:
 
 ```sh
-cosmos container register <host>
+cosmos host set <host> docker bool:true
 ```
-- `<host>`: The IP, hostname, or alias of the host (as defined in your SSH config).
 
-This marks the host as Docker-enabled in Cosmos. To unregister a host:
+This will make the module check the host for containers when listing or managing them.
+
+To unregister a host you can use the following command:
 
 ```sh
-cosmos container unregister <host>
+cosmos host unset <host> docker
 ```
 
 ## List Containers
@@ -36,9 +35,11 @@ This will display a table of containers, including their name, image, status, an
 Run a new container on a registered host:
 
 ```sh
-cosmos container run --hostname <host>
+cosmos container run --hostname <host> [...docker flags and args]
 ```
 - `--hostname, -h`: The hostname, IP, or alias of the target host. If not provided, you will be prompted for it.
+
+
 
 You will be prompted for any required information if not provided as flags.
 

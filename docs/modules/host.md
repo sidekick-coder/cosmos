@@ -114,3 +114,54 @@ Update the user and port for `myserver`:
 ```sh
 cosmos host update myserver --user admin --port 2222
 ```
+
+## Set Host Metadata
+
+This command allows you to set a metadata key-value pair for a specified host.
+
+It is used maily by other modules to register capabilities or features of the host, such as Docker support.
+
+### Usage
+```sh
+cosmos host set <host> <key> <value>
+```
+
+### Arguments
+- `<host>`: The hostname, IP, or alias of the target host.
+- `<key>`: The metadata key to set.
+- `<value>`: The value to set for the key. You can prefix the value with `bool:` or `number:` to cast the value (e.g., `bool:true`, `number:42`).
+
+### Examples
+Set a string metadata value:
+```sh
+cosmos host set myserver location "datacenter-1"
+```
+Set a boolean metadata value:
+```sh
+cosmos host set myserver enabled bool:true
+```
+Set a numeric metadata value:
+```sh
+cosmos host set myserver max_connections number:100
+```
+
+---
+
+## Unset Host Metadata
+
+This command allows you to remove a metadata key from a specified host.
+
+### Usage
+```sh
+cosmos host unset <host> <key>
+```
+
+### Arguments
+- `<host>`: The hostname, IP, or alias of the target host.
+- `<key>`: The metadata key to remove.
+
+### Examples
+Remove a metadata key:
+```sh
+cosmos host unset myserver location
+```
