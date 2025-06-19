@@ -19,12 +19,11 @@ export default class ContainerRepository {
             const name = data.Names
 
             return new Container({
-                id: `${this.host.Host || this.host.Hostname || ''}:${name}`,
+                host: this.host.Host || this.host.Hostname || '',
                 containerId: data.ID,
                 name: name,
                 image: data.Image,
                 status: data.Status,
-                host: this.host.Hostname || this.host.Host || '',
                 createdAt: data.CreatedAt,
             })
         })
