@@ -2,22 +2,18 @@ import { defineCommand } from '@/core/commander/defineCommand.js'
 import HostRepository from '@/repositories/HostRepository.js'
 import { input } from '@inquirer/prompts'
 import { ComposeFileRepository } from '../repositories/ComposeFileRepository.js'
+import { array } from '@/core/ui/array.js'
 
 export default defineCommand({
-    name: 'unregister',
-    description: 'Unregister a docker-compose file to be managed',
+    name: 'list-register',
+    description: 'Register a docker-compose file to be managed',
     options: {
         host: {
             type: 'arg',
             description: 'The IP, hostname or alias',
         },
-        entry: {
-            type: 'arg',
-            description: 'Filename or glob to the docker-compose file(s)',
-        },
     },
     async execute({ options }) {
-        let entry = options.entry
         let hostName = options.host
 
         if (!hostName) {
@@ -26,14 +22,8 @@ export default defineCommand({
             })
         }
 
-        if (!entry) {
-            entry = await input({
-                message: 'Enter the path to the file:',
-            })
-        }
-
-        if (!entry || !hostName) {
-            console.error('Both host and entry are required.')
+        if (!hostName) {
+            console.error('Host is required.')
             return
         }
 
@@ -51,6 +41,19 @@ export default defineCommand({
 
         const composeFileRepository = new ComposeFileRepository(host)
 
-        composeFileRepository.unregister(entry)
+        const config = await composeFileRepository.readConfig()
+
+        array(config.files, [
+            {
+                label: 'Index',
+                value: (i) => config.files.indexOf(i) + 1,
+                width: 5,
+            },
+            {
+                label: 'File',
+                value: (i) => i,
+                width: 50,
+            },
+        ])
     },
 })
