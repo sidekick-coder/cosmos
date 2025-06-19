@@ -8,7 +8,20 @@ import { tryCatch } from '@/utils/tryCatch.js'
 export default defineCommand({
     name: 'list',
     description: 'List containers from sources',
-    execute: async () => {
+    options: {
+        hosts: {
+            type: 'flag',
+            description: 'Filter containers by host',
+            alias: ['h'],
+            transform: (value: string) => value.split(',').map((host) => host.trim()),
+        },
+        format: {
+            type: 'flag',
+            description: 'Output format (json, table)',
+            alias: ['f'],
+        },
+    },
+    execute: async ({ options }) => {
         const hostRepository = new HostRepository()
         const hosts = await hostRepository.list()
 
@@ -16,6 +29,10 @@ export default defineCommand({
 
         for await (const host of hosts) {
             if (!host.metadata?.docker) {
+                continue
+            }
+
+            if (options.hosts && !options.hosts.includes(host.Host)) {
                 continue
             }
 
@@ -29,6 +46,11 @@ export default defineCommand({
             }
 
             containers.push(...sourceContainers)
+        }
+
+        if (options.format === 'json') {
+            console.log(JSON.stringify(containers))
+            return
         }
 
         if (containers.length === 0) {

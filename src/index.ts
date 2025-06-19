@@ -4,6 +4,7 @@ import host from './modules/host/index.js'
 import container from './modules/container/index.js'
 import stack from './modules/stack/index.js'
 import register from './modules/register/index.js'
+import { parse } from './core/commander/options.js'
 
 const commander = createCommander({
     bin: 'cosmos',
@@ -19,7 +20,16 @@ modules.forEach((module) => {
 })
 
 const args = process.argv.slice(2)
-const firstArg = args[0]
+const options = parse(
+    {
+        name: {
+            type: 'arg',
+        },
+    },
+    args.join(' ')
+)
+
+const firstArg = options.name || args[0] || ''
 const registed: string[] = []
 
 commander.commands.forEach((command) => registed.push(command.name))
