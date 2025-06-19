@@ -26,12 +26,12 @@ export default defineCommand({
             {
                 label: 'Host',
                 value: 'Host',
-                width: 20,
+                width: 15,
             },
             {
                 label: 'Hostname',
                 value: 'Hostname',
-                width: 20,
+                width: 15,
             },
             {
                 label: 'User',
@@ -46,6 +46,15 @@ export default defineCommand({
             {
                 label: 'IdentityFile',
                 value: 'IdentityFile',
+            },
+            {
+                label: 'Metadata',
+                value: (host) => {
+                    return Object.entries(host.metadata || {})
+                        .map(([key, value]) => `${key}=${value}`)
+                        .join(', ')
+                },
+                width: 30,
             },
         ])
     },
