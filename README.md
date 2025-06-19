@@ -68,9 +68,7 @@ For full documentation, see [docs/modules/host.md](docs/modules/host.md).
 
 This lets you manage Docker containers across your registered hosts, it is useful to have an overview of all containers running on all your hosts, and to manage them easily.
 
-- `register <host>`: Register a host as Docker-enabled.
-- `unregister <host>`: Unregister a host from Docker management.
-- `list`: List all containers across registered hosts.
+- `list`: List all containers across hosts.
 - `run --hostname <host> [options]`: Run a new container on a host. Prompts for missing required flags.
 - `remove --hostname <host> <container1> [<container2> ...]`: Remove one or more containers from a host.
 - `restart [--hosts <host1,host2,...>] [--names <container1,container2,...>]`: Restart containers on one or more hosts. Prompts for confirmation if no filters are provided.
